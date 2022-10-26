@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.2092
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geo_agl_tool", "geo_agl_tool\geo_agl_tool.vcxproj", "{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "polygon", "polygon\polygon.vcxproj", "{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TriMesh", "TriMesh\TriMesh.vcxproj", "{9FA6D532-246E-4FB1-A05F-B83EA44491DD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Debug|x64.ActiveCfg = Debug|x64
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Debug|x64.Build.0 = Debug|x64
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Debug|x86.ActiveCfg = Debug|Win32
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Debug|x86.Build.0 = Debug|Win32
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Release|x64.ActiveCfg = Release|x64
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Release|x64.Build.0 = Release|x64
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Release|x86.ActiveCfg = Release|Win32
+		{F6EED394-91CF-4185-BE9C-CDCED6F3E4A8}.Release|x86.Build.0 = Release|Win32
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Debug|x64.ActiveCfg = Debug|x64
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Debug|x64.Build.0 = Debug|x64
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Debug|x86.ActiveCfg = Debug|Win32
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Debug|x86.Build.0 = Debug|Win32
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Release|x64.ActiveCfg = Release|x64
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Release|x64.Build.0 = Release|x64
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Release|x86.ActiveCfg = Release|Win32
+		{3AF137EF-F47C-4230-8FE9-F2C5A87F830D}.Release|x86.Build.0 = Release|Win32
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Debug|x64.ActiveCfg = Debug|x64
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Debug|x64.Build.0 = Debug|x64
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Debug|x86.ActiveCfg = Debug|Win32
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Debug|x86.Build.0 = Debug|Win32
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Release|x64.ActiveCfg = Release|x64
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Release|x64.Build.0 = Release|x64
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Release|x86.ActiveCfg = Release|Win32
+		{9FA6D532-246E-4FB1-A05F-B83EA44491DD}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75FDB13A-160A-4A0B-8EB7-2C62D12290F8}
+	EndGlobalSection
+EndGlobal
