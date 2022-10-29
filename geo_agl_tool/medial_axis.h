@@ -6,12 +6,6 @@
 #include <geometric_primitive.h>
 #include <boost/polygon/polygon.hpp>
 
-
-using gp::Point2d;
-using gp::Segment2d;
-using gp::Polygon2d;
-using gp::Polygons2d;
-
 namespace boost {
 	namespace polygon {
 		template <>

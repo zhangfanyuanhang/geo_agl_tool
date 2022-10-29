@@ -13,10 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="MedialAxis">
+      <UniqueIdentifier>{f72bb868-2a9e-494d-8940-261636de1aa9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="geo_agl_tool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="easyx_show.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MedialAxis\MedialAxisTransform.cpp">
+      <Filter>MedialAxis</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="easyx_show.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MedialAxis\boost_polygon.h">
+      <Filter>MedialAxis</Filter>
+    </ClInclude>
+    <ClInclude Include="MedialAxis\MedialAxisTransform.h">
+      <Filter>MedialAxis</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
