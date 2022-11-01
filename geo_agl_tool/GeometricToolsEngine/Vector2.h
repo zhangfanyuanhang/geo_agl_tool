@@ -8,16 +8,16 @@
 namespace gte {
 
 	template <typename CoordType> class Vector2;
-	using Vector2i = Vector2<long>;
-	using Vector2d = Vector2<double>;
+	using Vector2i = Vector2<int64_t>;
+	using Vector2d = Vector2<double_t>;
 
 
 	template <typename CoordType>
 	class Vector2 : public Vector<CoordType, 2>
 	{
 	public:
-		Vector2() :Vector<CoordType, 2>() {};
-		~Vector2() {};
+		Vector2() = default;
+		~Vector2() = default;
 		Vector2(CoordType x, CoordType y) :Vector<CoordType, 2>({x,y}) {};
 		Vector2(std::initializer_list<CoordType> xy) :Vector<CoordType, 2>(xy) {};
 

@@ -13,8 +13,8 @@ namespace gte {
 	public:
 		typedef PointType point_type;
 	public:
-		Segment() {}
-		~Segment() {}
+		Segment() = default;
+		~Segment() = default;
 		Segment(const point_type& pt0, const point_type& pt1){
 			mPoints[0] = pt0;
 			mPoints[1] = pt1;
@@ -26,6 +26,8 @@ namespace gte {
 		inline const point_type& p1()const { return mPoints[1]; }
 		inline point_type& p1() { return mPoints[1]; }
 
+		inline const point_type& operator[](size_t i)const { return mPoints[i]; }
+		inline point_type& operator[](size_t i) { return mPoints[i]; }
 	private:
 		std::array<point_type,2> mPoints;
 	};

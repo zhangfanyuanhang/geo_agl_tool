@@ -29,14 +29,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="easyx_show.hpp">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MedialAxis\boost_polygon.h">
       <Filter>MedialAxis</Filter>
     </ClInclude>
     <ClInclude Include="MedialAxis\MedialAxisTransform.h">
       <Filter>MedialAxis</Filter>
+    </ClInclude>
+    <ClInclude Include="easyx_show.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -15,8 +15,8 @@ namespace gte {
 	class Segment2:public Segment<PointType>
 	{
 	public:
-		Segment2() {};
-		~Segment2() {};
+		Segment2() = default;
+		~Segment2() = default;
 		Segment2(const PointType& pt0, const PointType& pt1):Segment<PointType>(pt0, pt1){};
 	private:
 	};

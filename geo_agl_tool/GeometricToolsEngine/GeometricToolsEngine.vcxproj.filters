@@ -51,6 +51,9 @@
     <ClInclude Include="MathDefines.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="BoundBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeometricToolsEngine.cpp">

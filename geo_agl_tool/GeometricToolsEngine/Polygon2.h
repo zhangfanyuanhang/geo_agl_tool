@@ -15,8 +15,8 @@ namespace gte {
 	class Polygon2 : public Polygon<PointType>
 	{
 	public:
-		Polygon2(): Polygon<PointType>(){};
-		~Polygon2() {};
+		Polygon2() = default;
+		~Polygon2() = default;
 
 		Polygon2(const std::vector<PointType>& pts) :Polygon<PointType>(pts) {};
 		Polygon2(std::initializer_list<PointType>& pts) :Polygon<PointType>(pts) {};

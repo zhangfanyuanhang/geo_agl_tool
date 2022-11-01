@@ -8,23 +8,13 @@
 
 namespace gte {
 
-	using Point2i = Vector2<long>;
-	using Point2d = Vector2<double>;
+	using Point2i = Vector2i;
+	using Point2d = Vector2d;
 
-	using Point3i = Vector3<long>;
-	using Point3d = Vector3<double>;
+	using Point3i = Vector3i;
+	using Point3d = Vector3d;
 
-	/*template<typename PointType1, typename PointType2>
-	void convertPointMM2UM(const PointType1& pti, PointType2& ptd)
-	{
-		static_assert(PointType1::dim == PointType2::dim)
-		;
-	}
-	template<typename PointType1, typename PointType2>
-	void convertPointUM2MM(const PointType1& pti, PointType2& ptd)
-	{
-		;
-	}*/
+	
 }
 
 

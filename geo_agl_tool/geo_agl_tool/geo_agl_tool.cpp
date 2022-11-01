@@ -8,10 +8,11 @@
 
 #include "MedialAxis/boost_polygon.h"
 #include "MedialAxis/MedialAxisTransform.h"
-#include "easyx_show.hpp"
+#include "easyx_show.h"
 
 #include "Point.h"
 #include "Polygons2.h"
+#include "Convertor.h"
 
 #include "trimesh.h"
 
@@ -48,6 +49,12 @@ int main()
 		trimesh.loadMesh(stl_path);
 		trimesh.slice(pt,dir,&plys);
 
+		
+		gte::Polygons2i umPlys;
+		gte::polygonsConvertorMM2UM(plys,umPlys);
+		gte::BoundingBox<gte::Point2i> aabb;
+		umPlys.AABB(aabb);
+		
 		//MedialAxisTransform mat(plys);
 		//voronoi_diagram<double> vd;
 		//construct_voronoi(points.begin(), points.end(), &vd);
@@ -56,7 +63,9 @@ int main()
 
 		EasyXShow2D easyx_show;
 		easyx_show.setWindows();
-		easyx_show.polygons(plys);
+		easyx_show.polygons(umPlys);
+		easyx_show.show();
+		//easyx_show.polygons(plys);
 		easyx_show.closeWindows();
 		
 

@@ -162,7 +162,7 @@
     <ClCompile Include="MedialAxis\MedialAxisTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="easyx_show.hpp" />
+    <ClInclude Include="easyx_show.h" />
     <ClInclude Include="MedialAxis\boost_polygon.h" />
     <ClInclude Include="MedialAxis\MedialAxisTransform.h" />
   </ItemGroup>

@@ -15,8 +15,8 @@ namespace gte {
 	class Polygons2:public Polygons<PolygonType>
 	{
 	public:
-		Polygons2() {};
-		~Polygons2() {};
+		Polygons2() = default;
+		~Polygons2() = default;
 
 		Polygons2(const std::vector<PolygonType>& pts) :Polygons<PolygonType>(pts) {}
 		Polygons2(std::initializer_list<PolygonType>& pts) :Polygons<PolygonType>(pts) {}

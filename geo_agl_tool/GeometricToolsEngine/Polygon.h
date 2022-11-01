@@ -5,6 +5,8 @@
 
 #include <vector>
 #include "Point.h"
+#include "BoundBox.h"
+
 namespace gte {
 	template <typename PointType>
 	class Polygon
@@ -14,8 +16,8 @@ namespace gte {
 		typedef typename std::vector<point_type>::const_iterator const_iterator;
 		typedef typename std::vector<point_type>::iterator iterator;
 	public:
-		Polygon() {};
-		~Polygon() {};
+		Polygon() = default;
+		~Polygon() = default;
 		
 		Polygon(const std::vector<point_type>& pts) :mPolygon(pts) {}
 		Polygon(std::initializer_list<point_type>& pts) {
@@ -26,6 +28,7 @@ namespace gte {
 		}
 		inline void add(point_type pt) { mPolygon.push_back(pt); }
 		inline size_t size()const { return mPolygon.size(); }
+		inline void resize(size_t size) { mPolygon.resize(size); };
 		
 		inline const point_type& operator[](size_t i)const { return mPolygon[i]; }
 		inline point_type& operator[](size_t i) { return mPolygon[i]; }
@@ -40,6 +43,9 @@ namespace gte {
 		iterator insert(const_iterator pos, InputIt first, InputIt last) { return mPolygon.insert(pos, first, last); }
 
 		inline void clear() { mPolygon.clear(); }
+
+		
+		void AABB(BoundingBox<point_type>& aabb) { AxiallyAlignedBoundingBox(&mPolygon[0], mPolygon.size(), aabb); }
 	private:
 		std::vector<point_type> mPolygon;
 	};
