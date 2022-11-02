@@ -20,6 +20,7 @@ namespace gte {
 		~Vector2() = default;
 		Vector2(CoordType x, CoordType y) :Vector<CoordType, 2>({x,y}) {};
 		Vector2(std::initializer_list<CoordType> xy) :Vector<CoordType, 2>(xy) {};
+		Vector2(Vector<CoordType, 2>& vec):Vector<CoordType, 2>(vec) {};
 
 		inline const CoordType& x()const { return (*this)[0]; }
 		inline CoordType& x() { return (*this)[0]; }

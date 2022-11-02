@@ -6,6 +6,7 @@
 #include <vector>
 #include "Point.h"
 #include "BoundBox.h"
+#include "Segment.h"
 
 namespace gte {
 	template <typename PointType>
@@ -46,6 +47,18 @@ namespace gte {
 
 		
 		void AABB(BoundingBox<point_type>& aabb) { AxiallyAlignedBoundingBox(&mPolygon[0], mPolygon.size(), aabb); }
+		
+		template <typename DestIt>
+		void Segments(DestIt iter) {
+			size_t size = mPolygon.size();
+			size_t j = 0;
+			for (size_t i = 0; i < size; i++)
+			{
+				j = (i + 1) % size;
+				Segment<point_type> segm(mPolygon[i], mPolygon[j]);
+				iter->push_back(segm);
+			};
+		};
 	private:
 		std::vector<point_type> mPolygon;
 	};

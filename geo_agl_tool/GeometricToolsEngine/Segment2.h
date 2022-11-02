@@ -18,6 +18,8 @@ namespace gte {
 		Segment2() = default;
 		~Segment2() = default;
 		Segment2(const PointType& pt0, const PointType& pt1):Segment<PointType>(pt0, pt1){};
+		Segment2(Segment<PointType>& segm):Segment<PointType>(segm) {};
+
 	private:
 	};
 

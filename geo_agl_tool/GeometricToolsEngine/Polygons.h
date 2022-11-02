@@ -46,6 +46,12 @@ namespace gte {
 
 		void AABB(BoundingBox<point_type>& aabb) { mPolygons[0].AABB(aabb);}
 		
+		template <typename DestIt>
+		void Segments(DestIt iter) {
+			std::for_each(mPolygons.begin(), mPolygons.end(), 
+				[&iter](polygon_type& ply) {ply.Segments(iter); });
+			
+		}
 	private:
 		std::vector<polygon_type> mPolygons;
 	};

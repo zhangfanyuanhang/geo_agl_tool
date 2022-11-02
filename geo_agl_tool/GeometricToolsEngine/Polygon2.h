@@ -20,7 +20,7 @@ namespace gte {
 
 		Polygon2(const std::vector<PointType>& pts) :Polygon<PointType>(pts) {};
 		Polygon2(std::initializer_list<PointType>& pts) :Polygon<PointType>(pts) {};
-		
+		Polygon2(Polygon<PointType>& ply) :Polygon<PointType>(ply) {};
 	private:
 		
 	};

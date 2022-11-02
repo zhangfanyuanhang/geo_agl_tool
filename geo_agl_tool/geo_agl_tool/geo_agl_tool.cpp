@@ -4,8 +4,6 @@
 #include <iostream>
 #include <array>
 
-#include <boost/polygon/voronoi.hpp>
-
 #include "MedialAxis/boost_polygon.h"
 #include "MedialAxis/MedialAxisTransform.h"
 #include "easyx_show.h"
@@ -13,11 +11,11 @@
 #include "Point.h"
 #include "Polygons2.h"
 #include "Convertor.h"
-
+#include "Segment2.h"
+#include "Segment.h"
 #include "trimesh.h"
 
-using boost::polygon::voronoi_builder;
-using boost::polygon::voronoi_diagram;
+
 
 
 int main()
@@ -39,6 +37,8 @@ int main()
 
 
 	{
+		gte::Point2i pt2i;
+		gte::Point2d pt2d(gte::Vector<double_t,2> pt2i);
 		gte::Polygons2d plys;
 		gte::Point3d pt({0,0,100});
 		gte::Vector3d dir({ 0,0,1 });
@@ -55,11 +55,11 @@ int main()
 		gte::BoundingBox<gte::Point2i> aabb;
 		umPlys.AABB(aabb);
 		
-		//MedialAxisTransform mat(plys);
-		//voronoi_diagram<double> vd;
-		//construct_voronoi(points.begin(), points.end(), &vd);
-		//construct_voronoi(segments.begin(), segments.end(), &vd);
-		//construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
+		std::vector<gte::Segment2i> segms;
+		umPlys.Segments(&segms);
+		MedialAxisTransform mat(umPlys);
+		mat.ConstructVoronoi();
+
 
 		EasyXShow2D easyx_show;
 		easyx_show.setWindows();

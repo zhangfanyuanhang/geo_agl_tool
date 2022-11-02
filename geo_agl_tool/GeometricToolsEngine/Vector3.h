@@ -19,6 +19,7 @@ namespace gte {
 		~Vector3() = default;
 		Vector3(CoordType x, CoordType y, CoordType z) :Vector<CoordType, 3>({x,y,z}) {};
 		Vector3(std::initializer_list<CoordType> xyz) :Vector<CoordType, 3>(xyz) {};
+		Vector3(Vector<CoordType, 3>& vec) :Vector<CoordType, 3>(vec) {};
 
 		inline const CoordType& x()const { return (*this)[0]; }
 		inline CoordType& x() { return (*this)[0]; }
