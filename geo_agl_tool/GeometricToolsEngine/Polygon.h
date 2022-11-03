@@ -49,7 +49,7 @@ namespace gte {
 		void AABB(BoundingBox<point_type>& aabb) { AxiallyAlignedBoundingBox(&mPolygon[0], mPolygon.size(), aabb); }
 		
 		template <typename DestIt>
-		void Segments(DestIt iter) {
+		void Segments(DestIt* iter) {
 			size_t size = mPolygon.size();
 			size_t j = 0;
 			for (size_t i = 0; i < size; i++)

@@ -8,7 +8,38 @@ MedialAxisTransform::MedialAxisTransform(const gte::Polygons2i& plys):mPolygons(
 MedialAxisTransform::~MedialAxisTransform()
 {
 }
-void MedialAxisTransform::ConstructVoronoi()
+void MedialAxisTransform::ConstructVoronoi(std::vector<gte::Point2i>& pts)
 {
-	//construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &vd);
+	std::vector<gte::Segment2i> segms;
+	mPolygons.Segments(&segms);
+	boost::polygon::voronoi_builder<int64_t, boost::polygon::detail::my_voronoi_ctype_traits<int64_t>> voronoi_builder;
+	
+	for (auto iter = segms.begin(); iter != segms.end(); ++iter)
+	{
+		voronoi_builder.insert_segment(iter->p0().x(), iter->p0().y(), iter->p1().x(), iter->p1().y());
+	}
+	voronoi_builder.construct(&mVoronoiDiagram);
+
+	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
+	const voronoi_diagram::edge_type *cur_edge = &*edge_iter;
+	const voronoi_diagram::edge_type *nex_edge;
+	while (true)
+	{
+		if (cur_edge->vertex0())
+		{
+			int64_t x = cur_edge->vertex0()->x();
+			int64_t y = cur_edge->vertex0()->y();
+			pts.push_back({ x,y });
+		}
+
+		const voronoi_diagram::edge_type *nex_edge = cur_edge->next();
+		if (nullptr == nex_edge)
+			break;
+		if (nex_edge == &*edge_iter)
+		{
+			break;
+		}
+		cur_edge = nex_edge;
+	}
+	
 }
