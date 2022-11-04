@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base.h" />
     <ClInclude Include="BoundBox.h" />
     <ClInclude Include="Convertor.h" />
     <ClInclude Include="MathDefines.h" />
@@ -27,8 +28,12 @@
     <ClInclude Include="Polygon2.h" />
     <ClInclude Include="Polygons.h" />
     <ClInclude Include="Polygons2.h" />
+    <ClInclude Include="Polyline.h" />
+    <ClInclude Include="Polylines.h" />
     <ClInclude Include="Segment.h" />
     <ClInclude Include="Segment2.h" />
+    <ClInclude Include="Sequencer.h" />
+    <ClInclude Include="Sequencers.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="Vector3.h" />

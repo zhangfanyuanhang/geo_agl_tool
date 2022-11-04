@@ -46,9 +46,21 @@ void EasyXShow2D::showPolygons()
 			setlinecolor(RED);
 		else
 			setlinecolor(YELLOW);
-		polygon(&mPolygons[i][0], mPolygons[i].size());
+		//polygon(&mPolygons[i][0], mPolygons[i].size());
+		polyline(&mPolygons[i][0], mPolygons[i].size());
 	}
 }
+//template <typename T>
+//void polylines(const T *pts, size_t size)
+//{
+//	mPolygons.resize(1);
+//	size_t pt_size = polylines.size();
+//	mPolygons[0].resize(pt_size);
+//	for (size_t i = 0; i < polylines.size(); i++)
+//	{
+//		mPolygons[0][i] = POINT({ (LONG)polylines[i].x(), (LONG)polylines[i].y() });
+//	}
+//}
 template <typename Polygons>
 void EasyXShow2D::polygons(const Polygons &polygons)
 {
@@ -69,3 +81,4 @@ void EasyXShow2D::polygons(const Polygons &polygons)
 
 template void EasyXShow2D::polygons(const gte::Polygons2i &polygons);
 template void EasyXShow2D::polygons(const gte::Polygons2d &polygons);
+//template void EasyXShow2D::polylines(const std::vector<gte::Point2i>& polylines);

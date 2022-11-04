@@ -37,8 +37,6 @@ int main()
 
 
 	{
-		gte::Point2i pt2i;
-		gte::Point2d pt2d(gte::Vector<double_t,2> pt2i);
 		gte::Polygons2d plys;
 		gte::Point3d pt({0,0,100});
 		gte::Vector3d dir({ 0,0,1 });
@@ -54,16 +52,15 @@ int main()
 		gte::polygonsConvertorMM2UM(plys,umPlys);
 		gte::BoundingBox<gte::Point2i> aabb;
 		umPlys.AABB(aabb);
-		
-		std::vector<gte::Segment2i> segms;
-		umPlys.Segments(&segms);
-		MedialAxisTransform mat(umPlys);
-		mat.ConstructVoronoi();
+		//std::vector<gte::Point2i>  mat_pts;
+		//MedialAxisTransform mat(umPlys);
+		//mat.ConstructVoronoi(mat_pts);
 
 
 		EasyXShow2D easyx_show;
 		easyx_show.setWindows();
 		easyx_show.polygons(umPlys);
+		//easyx_show.polylines(mat_pts);
 		easyx_show.show();
 		//easyx_show.polygons(plys);
 		easyx_show.closeWindows();

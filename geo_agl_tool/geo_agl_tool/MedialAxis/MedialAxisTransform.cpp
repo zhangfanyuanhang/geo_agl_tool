@@ -1,5 +1,6 @@
 
 #include "MedialAxisTransform.h"
+#include "../easyx_show.h"
 
 MedialAxisTransform::MedialAxisTransform(const gte::Polygons2i& plys):mPolygons(plys)
 {
@@ -19,9 +20,31 @@ void MedialAxisTransform::ConstructVoronoi(std::vector<gte::Point2i>& pts)
 		voronoi_builder.insert_segment(iter->p0().x(), iter->p0().y(), iter->p1().x(), iter->p1().y());
 	}
 	voronoi_builder.construct(&mVoronoiDiagram);
+	///Voronoi±ß
+//	EasyXShow2D easyx_show;
+//	easyx_show.setWindows();
+	//easyx_show.polygons(umPlys);
+//	easyx_show.polylines(mat_pts);
+	
 
 	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
-	const voronoi_diagram::edge_type *cur_edge = &*edge_iter;
+	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
+	{
+		if (edge_iter->is_primary())
+		{
+			if (edge_iter->vertex0())
+			{
+				int64_t x = edge_iter->vertex0()->x();
+				int64_t y = edge_iter->vertex0()->y();
+				pts.push_back({ x,y });
+			}
+		}
+		;
+	}
+	//easyx_show.show();
+	//easyx_show.polygons(plys);
+	//easyx_show.closeWindows();
+	/*const voronoi_diagram::edge_type *cur_edge = &*edge_iter;
 	const voronoi_diagram::edge_type *nex_edge;
 	while (true)
 	{
@@ -40,6 +63,6 @@ void MedialAxisTransform::ConstructVoronoi(std::vector<gte::Point2i>& pts)
 			break;
 		}
 		cur_edge = nex_edge;
-	}
+	}*/
 	
 }

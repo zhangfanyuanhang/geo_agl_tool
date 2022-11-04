@@ -54,6 +54,21 @@
     <ClInclude Include="BoundBox.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Sequencer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polyline.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequencers.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polylines.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeometricToolsEngine.cpp">

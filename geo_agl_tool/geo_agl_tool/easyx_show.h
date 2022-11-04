@@ -7,7 +7,6 @@
 #include <conio.h>
 #include <vector>
 
-
 class EasyXShow2D
 {
 public:
@@ -16,6 +15,10 @@ public:
 
 	template <typename Polygons>
 	void polygons(const Polygons &polygons);
+
+	template <typename T>
+	void polylines(const T *pts,size_t size);
+
 	void show();
 	void setWindows(unsigned int width = 1000, unsigned int height = 1000);
 	void closeWindows();
