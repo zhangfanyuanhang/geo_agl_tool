@@ -6,50 +6,54 @@
 
 #include "Base.h"
 
+//! 序列容器类 deque
+//! 随机访问
+//! 插入和删除
 namespace gte {
-	template <typename PointType>
+	template <typename T>
 	class Sequencer: public Base
 	{
 	public:
-		typedef PointType point_type;
-		typedef typename std::vector<point_type>::const_iterator const_iterator;
-		typedef typename std::vector<point_type>::iterator iterator;
-
+		typedef T data_type;
+		typedef typename std::deque<data_type>::const_iterator const_iterator;
+		typedef typename std::deque<data_type>::iterator iterator;
+	
+	//! 不支持单独构造
 	protected:
-		
 		Sequencer() = default;
-		Sequencer(const std::vector<point_type>& pts) :Base(),mSequencer(pts) {}
-		Sequencer(std::initializer_list<point_type>& pts) :Base() {
-			if (size_t size = pts.size())
-			{
-				std::copy(pts, pts + size, mSequencer.begin());
-			}
-		}
-
+		Sequencer(const std::list<data_type>& pts) :Base(), mData(pts.begin(), pts.end()) {}
+		Sequencer(const std::vector<data_type>& pts) :Base(),mData(pts.begin(), pts.end()){}
+		Sequencer(std::initializer_list<data_type>& pts) :Base(), mData(pts) {}
+	
+	//! 重载实现
+	public:
+		inline const std::type_info& getType()override { return typeid(*this); }
+	
+	//! 基本操作
 	public:
 		~Sequencer() = default;
-		inline void add(point_type pt) { mSequencer.push_back(pt); }
-		inline size_t size()const { return mSequencer.size(); }
-		inline void resize(size_t size) { mSequencer.resize(size); };
+		inline void push_back(data_type pt) { mData.push_back(pt); }
+		inline size_t size()const { return mData.size(); }
+		inline void resize(size_t size) { mData.resize(size); };
 
-		inline const point_type& operator[](size_t i)const { return mSequencer[i]; }
-		inline point_type& operator[](size_t i) { return mSequencer[i]; }
+		inline const data_type& operator[](size_t i)const { return mData[i]; }
+		inline data_type& operator[](size_t i) { return mData[i]; }
 
-		inline const_iterator begin() const { return mSequencer.begin(); }
-		inline const_iterator end() const { return mSequencer.end(); }
+		inline const_iterator begin() const { return mData.begin(); }
+		inline const_iterator end() const { return mData.end(); }
 
-		inline iterator begin() { return mSequencer.begin(); }
-		inline iterator end() { return mSequencer.end(); }
+		inline iterator begin() { return mData.begin(); }
+		inline iterator end() { return mData.end(); }
 
 		template< class InputIt >
-		iterator insert(const_iterator pos, InputIt first, InputIt last) { return mSequencer.insert(pos, first, last); }
+		iterator insert(const_iterator pos, InputIt first, InputIt last) { return mData.insert(pos, first, last); }
 
-		inline void clear() { mSequencer.clear(); }
+		inline void clear() { mData.clear(); }
 
 
-
+	
 	protected:
-		std::vector<point_type>mSequencer;
+		std::deque<data_type> mData; 
 	};
 
 }

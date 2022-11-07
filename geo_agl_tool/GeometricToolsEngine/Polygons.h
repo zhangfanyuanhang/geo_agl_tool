@@ -3,52 +3,42 @@
 #ifndef GTE_POLYGONS_H
 #define GTE_POLYGONS_H
 
-#include "Sequencers.h"
+#include "Sequencer.h"
+#include "Polygon.h"
 
+//! 多边形组构成一个简单连通带孔的多边形区域。
+//! 第一个多边形为区域的外轮廓，方向为逆时针。
+//! 其它多边形为区域的内轮廓，方向为顺时针。
 namespace gte {
 
-	template <typename SequencerType>
-	class Polygons:public Sequencers<SequencerType>
+	template <typename PointType>
+	class Polygons :public Sequencer< Polygon<PointType> >
 	{
 	public:
-		typedef typename Sequencers<SequencerType>::point_type point_type;
-		typedef SequencerType sequencer_type;
-		typedef typename std::vector<sequencer_type>::const_iterator const_iterator;
-		typedef typename std::vector<sequencer_type>::iterator iterator;
+		typedef Polygon<PointType> polygon_type;
+		typedef PointType point_type;
+
 	public:
 		Polygons() = default;
 		~Polygons() = default;
-		
-		Polygons(const std::vector<sequencer_type>& pts) :Sequencers<SequencerType>(pts) {}
-		Polygons(std::initializer_list<sequencer_type>& pts) :Sequencers<SequencerType>(pts){}
-		/*inline void add(sequencer_type ply) { mPolygons.push_back(ply); }
-		inline size_t size()const { return mPolygons.size(); }
-		inline void resize(size_t size) { mPolygons.resize(size); }
+		Polygons(const std::list<polygon_type>& pts) :Sequencer<polygon_type>(pts) {}
+		Polygons(const std::vector<polygon_type>& pts) :Sequencer<polygon_type>(pts) {}
+		Polygons(std::initializer_list<polygon_type>& pts) :Sequencer<polygon_type>(pts) {}
 
-		inline const sequencer_type& operator[](size_t i)const { return mPolygons[i]; }
-		inline sequencer_type& operator[](size_t i) { return mPolygons[i]; }
+	//! 重载实现
+	public:
+		inline const std::type_info& getType()override { return typeid(*this); }
+	public:
+		//! 轴对称包围盒，只取第一个多边形
+		void AABB(BoundingBox<point_type>& aabb) { this->mData[0].AABB(aabb); }
 
-		inline const_iterator begin() const { return mPolygons.begin(); }
-		inline const_iterator end() const { return mPolygons.end(); }
-
-		inline iterator begin() { return mPolygons.begin(); }
-		inline iterator end() { return mPolygons.end(); }
-
-		template< class InputIt >
-		iterator insert(const_iterator pos, InputIt first, InputIt last) { return mPolygons.insert(pos, first, last); }
-
-		inline void clear() { mPolygons.clear(); }*/
-
-		void AABB(BoundingBox<point_type>& aabb) { this->mSequencers[0].AABB(aabb);}
-		
+		//! 转化成线段，相邻两点连接成线段
 		template <typename DestIt>
 		void Segments(DestIt* iter) {
-			std::for_each(this->mSequencers.begin(), this->mSequencers.end(),
-				[&iter](sequencer_type& ply) {ply.Segments(iter); });
-			
+			std::for_each(this->mData.begin(), this->mData.end(),
+				[&iter](polygon_type& ply) {ply.Segments(iter); });
+
 		}
-	//private:
-	//	std::vector<sequencer_type> mPolygons;
 	};
 }
 

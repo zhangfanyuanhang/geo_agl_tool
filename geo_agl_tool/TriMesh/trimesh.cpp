@@ -94,9 +94,9 @@ int TriMesh::slice(const gte::Point3d& point, const gte::Vector3d& direction,gte
 		{
 			float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
 			float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
-			polygon.add(gte::Point2d{ px,py });
+			polygon.push_back(gte::Point2d{ px,py });
 		}
-		plys->add(polygon);
+		plys->push_back(polygon);
 	}
 	{
 		PyObject* pPolygons = PyObject_GetAttrString(pPath2D, "polygons_full");
@@ -119,9 +119,9 @@ int TriMesh::slice(const gte::Point3d& point, const gte::Vector3d& direction,gte
 				float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
 				float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
 				std::cout << px << " " << py << std::endl;
-				polygon.add(gte::Point2d{px,py});
+				polygon.push_back(gte::Point2d{px,py});
 			}
-			plys->add(polygon);
+			plys->push_back(polygon);
 		}
 	}
 	return 0;

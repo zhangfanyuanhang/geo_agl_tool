@@ -5,7 +5,11 @@
 
 #include <list>
 #include <vector>
+#include <deque>
+#include <typeinfo.h>
 
+//! 虚基类
+//! 获得运行时类型信息
 namespace gte {
 	class Base
 	{
@@ -13,7 +17,7 @@ namespace gte {
 		Base() = default;
 		~Base() = default;
 
-
+		virtual const std::type_info& getType()=0;
 	};
 }
 

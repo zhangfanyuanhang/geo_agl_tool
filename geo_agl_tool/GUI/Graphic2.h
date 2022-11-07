@@ -8,7 +8,6 @@
 #include <graphics.h>		
 #include <conio.h>
 #include "Base.h"
-#include "Sequencers.h"
 
 namespace gui {
 
@@ -22,12 +21,18 @@ namespace gui {
 		void closeWindow() override;
 		void showWindow() override;
 
-		void setData(gte::Base* data, size_t size);
+		void setData(gte::Base* data);
 		void drawPolylines();
 		void drawPolygons();
+
+		template <typename T>
+		void drawPolyline(T* data);
+
+		template <typename T>
+		void drawPolygon(T* data);
 	private:
-		gte::Base* mpData;
-		size_t size;
+		gte::Base* mDataPtr = nullptr;
+		size_t mSize = 0;
 	};
 }
 

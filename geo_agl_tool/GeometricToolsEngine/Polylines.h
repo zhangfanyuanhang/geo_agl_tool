@@ -3,32 +3,31 @@
 #ifndef GTE_POLYLINES_H
 #define GTE_POLYLINES_H
 
-#include "Sequencers.h"
 #include "Polyline.h"
 
 namespace gte {
 
-	template <typename PointType> class Polylines;
-	using PolyLines2i = Polylines<PolyLine2i>;
-	using PolyLines2d = Polylines<PolyLine2d>;
-	using PolyLines3i = Polylines<PolyLine3i>;
-	using PolyLines3d = Polylines<PolyLine3d>;
+	/*template <typename PointType> class Polylines;
+	using PolyLines2i = Polylines<Point2i>;
+	using PolyLines2d = Polylines<Point2d>;
+	using PolyLines3i = Polylines<Point3i>;
+	using PolyLines3d = Polylines<Point3d>;*/
 
-	template <typename SequencerType>
-	class Polylines :public Sequencers<SequencerType>
+	template <typename PointType>
+	class Polylines :public Sequencer<PolyLine<PointType>>
 	{
 	public:
-		typedef typename Sequencers<SequencerType>::point_type point_type;
-		typedef SequencerType sequencer_type;
-		typedef typename std::vector<sequencer_type>::const_iterator const_iterator;
-		typedef typename std::vector<sequencer_type>::iterator iterator;
+		typedef PointType point_type;
+		typedef PolyLine<PointType> polyline_type;
 	public:
 		Polylines() = default;
 		~Polylines() = default;
 
-		Polylines(const std::vector<sequencer_type>& pts) :Sequencers<SequencerType>(pts) {}
-		Polylines(std::initializer_list<sequencer_type>& pts) :Sequencers<SequencerType>(pts) {}
-		
+		Polylines(const std::list<polyline_type>& pts) :Sequencer<polyline_type>(pts) {}
+		Polylines(const std::vector<polyline_type>& pts) :Sequencer<polyline_type>(pts) {}
+		Polylines(std::initializer_list<polyline_type>& pts) :Sequencer<polyline_type>(pts) {}
+	public:
+		inline const std::type_info& getType()override { return typeid(*this); }
 	};
 }
 

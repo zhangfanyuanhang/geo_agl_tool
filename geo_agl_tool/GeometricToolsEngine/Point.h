@@ -6,6 +6,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 
+//! 点结构数据，使用代数几何里面的向量数据结构
 namespace gte {
 
 	using Point2i = Vector2i;

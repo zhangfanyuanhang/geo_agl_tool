@@ -7,6 +7,7 @@
 #include <array>
 #include <initializer_list>
 
+//! 代数几何里面的向量结构
 namespace gte {
 
 	template <typename CoordType,size_t Dim>
