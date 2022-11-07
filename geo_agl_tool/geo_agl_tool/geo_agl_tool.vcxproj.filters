@@ -21,9 +21,6 @@
     <ClCompile Include="geo_agl_tool.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="easyx_show.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="MedialAxis\MedialAxisTransform.cpp">
       <Filter>MedialAxis</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
     </ClInclude>
     <ClInclude Include="MedialAxis\MedialAxisTransform.h">
       <Filter>MedialAxis</Filter>
-    </ClInclude>
-    <ClInclude Include="easyx_show.h">
-      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

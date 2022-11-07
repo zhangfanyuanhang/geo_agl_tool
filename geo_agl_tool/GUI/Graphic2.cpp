@@ -21,13 +21,12 @@ namespace gui {
 	{
 		closegraph();
 	}
-	void Graphic2::draw(gte::Base* data)
+	
+	void Graphic2::show(gte::Base* data)
 	{
 		mDataPtr = data;
 		drawAll();
-	}
-	void Graphic2::showWindow()
-	{
+
 		ExMessage msg;
 		float zoom = 0;
 		while (true)
@@ -53,6 +52,8 @@ namespace gui {
 	
 	void Graphic2::drawAll()
 	{
+		cleardevice();
+
 		drawPolyline();
 		drawPolylines();
 

@@ -6,7 +6,9 @@
 
 #include "MedialAxis/boost_polygon.h"
 #include "MedialAxis/MedialAxisTransform.h"
-#include "easyx_show.h"
+
+//#include "easyx_show.h"
+#include "Graphic2.h"
 
 #include "Point.h"
 #include "Polygons2.h"
@@ -57,14 +59,18 @@ int main()
 		//mat.ConstructVoronoi(mat_pts);
 
 
-		EasyXShow2D easyx_show;
-		easyx_show.setWindows();
-		easyx_show.polygons(umPlys);
+		//EasyXShow2D easyx_show;
+		//easyx_show.setWindows();
+		//easyx_show.polygons(umPlys);
 		//easyx_show.polylines(mat_pts);
-		easyx_show.show();
+		//easyx_show.show();
 		//easyx_show.polygons(plys);
-		easyx_show.closeWindows();
+		//easyx_show.closeWindows();
 		
+		gui::Graphic2 graphic2;
+		graphic2.initWindow(1000,1000);
+		graphic2.show(&umPlys);
+		graphic2.closeWindow();
 
 	}
 

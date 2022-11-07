@@ -13,11 +13,8 @@ namespace gui {
 	void Graphic3::closeWindow()
 	{
 	}
-	void Graphic3::showWindow()
-	{
-
-	}
-	void Graphic3::draw(gte::Base* data)
+	
+	void Graphic3::show(gte::Base* data)
 	{
 
 	}
