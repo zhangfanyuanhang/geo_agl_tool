@@ -21,7 +21,11 @@ namespace gui {
 	{
 		closegraph();
 	}
-
+	void Graphic2::draw(gte::Base* data)
+	{
+		mDataPtr = data;
+		drawAll();
+	}
 	void Graphic2::showWindow()
 	{
 		ExMessage msg;
@@ -41,13 +45,20 @@ namespace gui {
 			case WM_MOUSEWHEEL:
 				zoom += msg.wheel / 120 * 0.001;
 				setaspectratio(zoom, zoom);
+				drawAll();
 				break;
 			}
 		}
 	}
-	void Graphic2::setData(gte::Base* data)
+	
+	void Graphic2::drawAll()
 	{
-		mDataPtr = data;
+		drawPolyline();
+		drawPolylines();
+
+		drawPolygon();
+		drawPolygons();
+		
 	}
 	void Graphic2::drawPolylines()
 	{
@@ -95,28 +106,68 @@ namespace gui {
 			}
 		}
 	}
+	void Graphic2::drawPolyline()
+	{
+		if (nullptr == mDataPtr)
+			return;
 
+		const auto& type = mDataPtr->getType();
+		if (type == typeid(gte::PolyLine2i))
+		{
+			gte::PolyLine2i* data = (gte::PolyLine2i*)mDataPtr;
+			drawPolyline(data);
+		}
+		if (type == typeid(gte::PolyLine2d))
+		{
+			gte::PolyLine2d* data = (gte::PolyLine2d*)mDataPtr;
+			drawPolyline(data);
+		}
+	}
+	void Graphic2::drawPolygon()
+	{
+		if (nullptr == mDataPtr)
+			return;
+
+		const auto& type = mDataPtr->getType();
+		if (type == typeid(gte::Polygon2i))
+		{
+			gte::Polygon2i* data = (gte::Polygon2i*)mDataPtr;
+			drawPolygon(data);
+		}
+		if (type == typeid(gte::Polygon2d))
+		{
+			gte::Polygon2d* data = (gte::Polygon2d*)mDataPtr;
+			drawPolygon(data);
+		}
+	}
 	template <typename T>
 	void Graphic2::drawPolyline(T* data)
 	{
 		size_t size = (*data).size();
-		std::vector<POINT> pts(size);
-		for (size_t k = 0; k < size; ++k)
+		if (size)
 		{
-			pts[k] = { (LONG)(*data)[k].x() ,(LONG)(*data)[k].y() };
+			std::vector<POINT> pts(size);
+			for (size_t k = 0; k < size; ++k)
+			{
+				pts[k] = { (LONG)(*data)[k].x() ,(LONG)(*data)[k].y() };
+			}
+			polyline(&pts[0], size);
 		}
-		polyline(&pts[0], size);
+		
 	}
 	template <typename T>
 	void Graphic2::drawPolygon(T* data)
 	{
 		size_t size = (*data).size();
-		std::vector<POINT> pts(size);
-		for (size_t k = 0; k < size; ++k)
+		if (size)
 		{
-			pts[k] = { (LONG)(*data)[k].x() ,(LONG)(*data)[k].y() };
+			std::vector<POINT> pts(size);
+			for (size_t k = 0; k < size; ++k)
+			{
+				pts[k] = { (LONG)(*data)[k].x() ,(LONG)(*data)[k].y() };
+			}
+			polygon(&pts[0], size);
 		}
-		polygon(&pts[0], size);
 	}
 	template void Graphic2::drawPolyline(gte::PolyLine2i* data);
 	template void Graphic2::drawPolyline(gte::PolyLine2d* data);

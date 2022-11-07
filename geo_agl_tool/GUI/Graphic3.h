@@ -16,8 +16,9 @@ namespace gui {
 		void initWindow(int width, int height) override;
 		void closeWindow() override;
 		void showWindow() override;
+		void draw(gte::Base* data)override;
 	private:
-
+		gte::Base* mDataPtr = nullptr;
 	};
 
 }

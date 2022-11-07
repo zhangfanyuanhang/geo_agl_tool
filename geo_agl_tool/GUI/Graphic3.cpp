@@ -17,4 +17,8 @@ namespace gui {
 	{
 
 	}
+	void Graphic3::draw(gte::Base* data)
+	{
+
+	}
 }

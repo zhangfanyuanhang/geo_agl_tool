@@ -4,6 +4,8 @@
 #ifndef GUI_GRAPHIC_H
 #define GUI_GRAPHIC_H
 
+#include "Base.h"
+
 namespace {
 
 	class Graphic
@@ -15,6 +17,7 @@ namespace {
 		virtual void initWindow(int width,int height) = 0;
 		virtual void closeWindow() = 0;
 		virtual void showWindow() = 0;
+		virtual void draw(gte::Base* data) = 0;
 	protected:
 
 		int mWindowsWidth;

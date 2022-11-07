@@ -7,7 +7,7 @@
 #include "Graphic.h"
 #include <graphics.h>		
 #include <conio.h>
-#include "Base.h"
+
 
 namespace gui {
 
@@ -21,9 +21,16 @@ namespace gui {
 		void closeWindow() override;
 		void showWindow() override;
 
-		void setData(gte::Base* data);
+		void draw(gte::Base* data)override;
+		
+
+	private:
 		void drawPolylines();
 		void drawPolygons();
+		void drawPolyline();
+		void drawPolygon();
+
+		void drawAll();
 
 		template <typename T>
 		void drawPolyline(T* data);
@@ -32,7 +39,6 @@ namespace gui {
 		void drawPolygon(T* data);
 	private:
 		gte::Base* mDataPtr = nullptr;
-		size_t mSize = 0;
 	};
 }
 
