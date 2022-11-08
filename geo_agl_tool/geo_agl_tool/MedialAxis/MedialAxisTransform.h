@@ -9,8 +9,8 @@
 #include "boost_polygon.h"
 #include "boost/polygon/voronoi.hpp"
 
-//using boost::polygon::voronoi_builder;
-//using boost::polygon::voronoi_diagram;
+#include "Graphic.h"
+
 namespace boost {
 	namespace polygon {
 		namespace detail {
@@ -35,16 +35,23 @@ namespace boost {
 class MedialAxisTransform
 {
 	using voronoi_diagram = boost::polygon::voronoi_diagram<double_t>;
+	using voronoi_cell = boost::polygon::voronoi_cell<double_t>;
+	using voronoi_edge = boost::polygon::voronoi_edge<double_t>;
+	using voronoi_vertex = boost::polygon::voronoi_vertex<double_t>;
 public:
 	MedialAxisTransform(const gte::Polygons2i& plys);
 	~MedialAxisTransform();
 
-	void ConstructVoronoi(std::vector<gte::Point2i>& pts);
+	void ConstructVoronoi();
+	void show();
 private:
 	voronoi_diagram mVoronoiDiagram;
 private:
 	gte::Polygons2i mPolygons;
 	std::vector<gte::Point2i> mMATPoints;
+
+	gui::Graphic* mGraphicPtr;
+	gte::Base* mPolys;
 };
 
 

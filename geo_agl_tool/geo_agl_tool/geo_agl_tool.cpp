@@ -54,23 +54,15 @@ int main()
 		gte::polygonsConvertorMM2UM(plys,umPlys);
 		gte::BoundingBox<gte::Point2i> aabb;
 		umPlys.AABB(aabb);
-		//std::vector<gte::Point2i>  mat_pts;
-		//MedialAxisTransform mat(umPlys);
-		//mat.ConstructVoronoi(mat_pts);
+		MedialAxisTransform mat(umPlys);
+		mat.ConstructVoronoi();
+		mat.show();
 
-
-		//EasyXShow2D easyx_show;
-		//easyx_show.setWindows();
-		//easyx_show.polygons(umPlys);
-		//easyx_show.polylines(mat_pts);
-		//easyx_show.show();
-		//easyx_show.polygons(plys);
-		//easyx_show.closeWindows();
 		
-		gui::Graphic2 graphic2;
+		/*gui::Graphic2 graphic2;
 		graphic2.initWindow(1000,1000);
 		graphic2.show(&umPlys);
-		graphic2.closeWindow();
+		graphic2.closeWindow();*/
 
 	}
 

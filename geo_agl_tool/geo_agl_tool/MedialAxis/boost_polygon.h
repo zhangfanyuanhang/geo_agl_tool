@@ -17,7 +17,7 @@ namespace boost {
 
 		template <>
 		struct point_traits<gte::Point2i> {
-			typedef int coordinate_type;
+			typedef int64_t coordinate_type;
 
 			static inline coordinate_type get(const gte::Point2i& point, orientation_2d orient) {
 				return (orient == HORIZONTAL) ? point.x() : point.y();
@@ -25,7 +25,7 @@ namespace boost {
 		};
 		template <>
 		struct point_mutable_traits<gte::Point2i> {
-			typedef int coordinate_type;
+			typedef int64_t coordinate_type;
 
 			static inline void set(gte::Point2i& point, orientation_2d orient, int value) {
 				if (orient == HORIZONTAL)
@@ -42,7 +42,7 @@ namespace boost {
 		struct geometry_concept<gte::Segment2i> { typedef segment_concept type; };
 		template <>
 		struct segment_traits<gte::Segment2i> {
-			typedef typename int coordinate_type;
+			typedef typename int64_t coordinate_type;
 			typedef typename gte::Segment2i::point_type point_type;
 
 			static inline point_type get(const gte::Segment2i& segment, direction_1d dir) {
@@ -52,7 +52,7 @@ namespace boost {
 
 		template <>
 		struct segment_mutable_traits<gte::Segment2i> {
-			typedef typename int coordinate_type;
+			typedef typename int64_t coordinate_type;
 			typedef typename gte::Segment2i::point_type point_type;
 
 			static inline void set(gte::Segment2i& segment, direction_1d dir, const point_type& point) {
@@ -76,7 +76,7 @@ namespace boost {
 
 		template <>
 		struct polygon_traits<gte::Polygon2i> {
-			typedef int coordinate_type;
+			typedef int64_t coordinate_type;
 			typedef gte::Polygon2i::const_iterator iterator_type;
 			typedef gte::Polygon2i point_type;
 			// Get the begin iterator
@@ -119,7 +119,7 @@ namespace boost {
 		//next we map to the concept through traits
 		template <>
 		struct polygon_set_traits<gte::Polygons2i> {
-			typedef int coordinate_type;
+			typedef int64_t coordinate_type;
 			typedef gte::Polygons2i::const_iterator iterator_type;
 			typedef gte::Polygons2i operator_arg_type;
 			
@@ -144,7 +144,7 @@ namespace boost {
 				//this is kind of cheesy. I am copying the unknown input geometry
 				//into my own polygon set and then calling get to populate the
 				//deque
-				polygon_set_data<int> ps;
+				polygon_set_data<int64_t> ps;
 				ps.insert(input_begin, input_end);
 				ps.get(polygon_set);
 				//if you had your own odd-ball polygon set you would probably have

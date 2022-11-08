@@ -11,12 +11,13 @@
 //! 其它多边形为区域的内轮廓，方向为顺时针。
 namespace gte {
 
-	template <typename PointType>
-	class Polygons :public Sequencer< Polygon<PointType> >
+	template <typename PolygonType>
+	class Polygons :public Sequencer< PolygonType >
 	{
 	public:
-		typedef Polygon<PointType> polygon_type;
-		typedef PointType point_type;
+		typedef PolygonType polygon_type;
+		using point_type = typename polygon_type::point_type;
+		//typedef PointType point_type;
 
 	public:
 		Polygons() = default;

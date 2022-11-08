@@ -6,7 +6,7 @@
 
 #include "Base.h"
 
-namespace {
+namespace gui{
 
 	class Graphic
 	{

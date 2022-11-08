@@ -13,12 +13,12 @@ namespace gte {
 	using PolyLines3i = Polylines<Point3i>;
 	using PolyLines3d = Polylines<Point3d>;*/
 
-	template <typename PointType>
-	class Polylines :public Sequencer<PolyLine<PointType>>
+	template <typename PolylineType>
+	class Polylines :public Sequencer<PolylineType>
 	{
 	public:
-		typedef PointType point_type;
-		typedef PolyLine<PointType> polyline_type;
+		typedef PolylineType polyline_type;
+		using point_type = typename polyline_type::point_type;
 	public:
 		Polylines() = default;
 		~Polylines() = default;

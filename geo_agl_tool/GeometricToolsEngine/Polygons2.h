@@ -4,22 +4,24 @@
 #define GTE_POLYGONS2_HPP
 
 #include "Polygons.h"
+#include "Polygon2.h"
 
 
 //! 二维多边形区域
 namespace gte {
 
 	template <typename PointType> class Polygons2;
-	using Polygons2i = Polygons2<Point2i>;
-	using Polygons2d = Polygons2<Point2d>;
+	using Polygons2i = Polygons2<Polygon2i>;
+	using Polygons2d = Polygons2<Polygon2d>;
 
-	template <typename PointType>
-	class Polygons2:public Polygons<PointType>
+	template <typename PolygonType>
+	class Polygons2:public Polygons<PolygonType>
 	{
-		static_assert(PointType::N == 2,"Dimension must be 2.");
 	public:
-		typedef PointType point_type;
-		using polygon_type = typename Polygons<PointType>::polygon_type;
+		typedef PolygonType polygon_type;
+		using point_type = typename polygon_type::point_type;
+		
+		static_assert(point_type::N == 2, "Dimension must be 2.");
 	public:
 		Polygons2() = default;
 		~Polygons2() = default;

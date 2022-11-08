@@ -4,20 +4,22 @@
 #define GTE_POLYLINES2_H
 
 #include "Polylines.h"
+#include "Polyline2.h"
 
 namespace gte {
 
 	template <typename PointType> class Polylines2;
-	using PolyLines2i = Polylines2<Point2i>;
-	using PolyLines2d = Polylines2<Point2d>;
+	using Polylines2i = Polylines2<Polyline2i>;
+	using Polylines2d = Polylines2<Polyline2d>;
 
-	template <typename PointType>
-	class Polylines2 :public Polylines<PointType>
+	template <typename PolylineType>
+	class Polylines2 :public Polylines<PolylineType>
 	{
-		static_assert(PointType::N == 2, "Dimension must be 2.");
+		
 	public:
-		typedef PointType point_type;
-		using polyline_type = typename Polylines<PointType>::polyline_type;
+		typedef PolylineType polyline_type;
+		using point_type = typename PolylineType::point_type;
+		static_assert(point_type::N == 2, "Dimension must be 2.");
 	public:
 		Polylines2() = default;
 		~Polylines2() = default;
