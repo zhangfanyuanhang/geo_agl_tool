@@ -15,6 +15,7 @@ namespace gui {
 
 		void initWindow(int width, int height) override;
 		void closeWindow() override;
+		void setSourceData(gte::Base* data) override;
 		void show(gte::Base* data)override;
 	private:
 		gte::Base* mDataPtr = nullptr;

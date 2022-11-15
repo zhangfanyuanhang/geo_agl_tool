@@ -13,9 +13,13 @@ namespace gui {
 	void Graphic3::closeWindow()
 	{
 	}
-	
+	void Graphic3::setSourceData(gte::Base* data)
+	{
+		mSourcePtr = data;
+	}
 	void Graphic3::show(gte::Base* data)
 	{
 
 	}
+
 }

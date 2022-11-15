@@ -16,11 +16,14 @@ namespace gui{
 
 		virtual void initWindow(int width,int height) = 0;
 		virtual void closeWindow() = 0;
+		virtual void setSourceData(gte::Base* data) = 0;
 		virtual void show(gte::Base* data) = 0;
 	protected:
 
 		int mWindowsWidth;
 		int mWindowsHeight;
+
+		gte::Base* mSourcePtr;
 	};
 
 }
