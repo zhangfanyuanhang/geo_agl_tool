@@ -4,6 +4,8 @@
 #include "Polylines2.h"
 #include "Polyline2.h"
 
+#include <boost/geometry.hpp>
+
 MedialAxisTransform::MedialAxisTransform(const gte::Polygons2i& plys):mPolygons(plys)
 {
 	mGraphicPtr = new gui::Graphic2();
@@ -25,6 +27,7 @@ MedialAxisTransform::~MedialAxisTransform()
 void  MedialAxisTransform::show()
 {
 	mGraphicPtr->initWindow(1000, 1000);
+	mGraphicPtr->setSourceData(&mPolygons);
 	mGraphicPtr->show(mPolys);
 	mGraphicPtr->closeWindow();
 }
@@ -64,25 +67,29 @@ void MedialAxisTransform::ConstructVoronoi()
 				edge = cell->incident_edge();
 				do
 				{
-					if (edge->vertex0() && edge->vertex1())
+					//if (edge->is_primary())
 					{
-						int64_t x = edge->vertex0()->x();
-						int64_t y = edge->vertex0()->y();
-						gte::Point2i pt0({ x,y });
-						gte::Point2i pt1({ x,y });
-						if (boost::polygon::contains(mPolygons[0], pt0)&& boost::polygon::contains(mPolygons[0], pt1)
-							&& !boost::polygon::contains(mPolygons[1], pt0) && !boost::polygon::contains(mPolygons[1], pt1))
+						if (edge->vertex0() && edge->vertex1())
 						{
-							polyline.push_back(pt0);
-							polyline.push_back(pt1);
+							int64_t x = edge->vertex0()->x();
+							int64_t y = edge->vertex0()->y();
+							gte::Point2i pt0({ x,y });
+							gte::Point2i pt1({ x,y });
+							if (boost::polygon::contains(mPolygons[0], pt0) && boost::polygon::contains(mPolygons[0], pt1)
+								&& !boost::polygon::contains(mPolygons[1], pt0) && !boost::polygon::contains(mPolygons[1], pt1))
+							{
+								//boost::geometry::distance(pt0, mPolygons[0])
+								polyline.push_back(pt0);
+								polyline.push_back(pt1);
+							}
 						}
 					}
+					
 					edge = edge->next();
 				} while (edge && edge != cell->incident_edge());
 				polylines->push_back(polyline);
 				//break;
 			}
-			
 		}
 		
 	}

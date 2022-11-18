@@ -10,42 +10,43 @@
 //! 代数几何里面的向量结构
 namespace gte {
 
-	template <typename CoordType,size_t Dim>
+	template <typename T,size_t N>
 	class Vector
 	{
 	public:
-		typedef  CoordType coord_type;
-		static const  size_t N = Dim;
+		typedef  T coord_type;
+		static const  size_t Dim = N;
 	public:
 		Vector() = default;
-		~Vector() = default;
-		Vector(std::array<coord_type, Dim> const& values):mTuple(values)
-		{
-		}
+		virtual ~Vector() = default;
+		Vector(std::array<coord_type, N> const& values) :mTuple(values) {}
 		Vector(std::initializer_list<coord_type> values)
 		{
 			size_t const num = values.size();
-			if (Dim == num)
+			if (N == num)
 			{
 				std::copy(values.begin(), values.end(), mTuple.begin());
 			}
-			else if (Dim > num)
+			else if (N > num)
 			{
 				std::copy(values.begin(), values.end(), mTuple.begin());
 				std::fill(mTuple.begin() + num, mTuple.end(), (coord_type)0);
 			}
-			else // Dim < num
+			else // N < num
 			{
-				std::copy(values.begin(), values.begin() + Dim, mTuple.begin());
+				std::copy(values.begin(), values.begin() + N, mTuple.begin());
 			}
 		}
-		
-		inline std::array<coord_type, Dim> data()const { return mTuple; }
+		Vector(coord_type* values,size_t n){ std::copy(values, values+n, mTuple.begin()); }
+		///
+		inline std::array<coord_type, N> data()const { return mTuple; }
 		inline size_t size() const
 		{
-			return Dim;
+			return N;
 		}
-
+		coord_type length(bool robust = false)const;
+		Vector normalize(bool robust)const;
+		//
 		inline coord_type const& operator[](size_t i) const
 		{
 			return mTuple[i];
@@ -87,67 +88,63 @@ namespace gte {
 			return mTuple >= vec.mTuple;
 		}
 
-		// Special vectors.
-
-	   // All components are 0.
+		/// Special vectors.
+	    // All components are 0.
 		void makeZero()
 		{
-			std::fill(mTuple.begin(), mTuple.end(), (CoordType)0);
+			std::fill(mTuple.begin(), mTuple.end(), (T)0);
 		}
-
 		// All components are 1.
 		void makeOnes()
 		{
-			std::fill(mTuple.begin(), mTuple.end(), (CoordType)1);
+			std::fill(mTuple.begin(), mTuple.end(), (T)1);
 		}
-
 		// Component d is 1, all others are zero.
 		void makeUnit(int d)
 		{
-			std::fill(mTuple.begin(), mTuple.end(), (CoordType)0);
-			if (0 <= d && d < Dim)
+			std::fill(mTuple.begin(), mTuple.end(), (T)0);
+			if (0 <= d && d < N)
 			{
-				mTuple[d] = (CoordType)1;
+				mTuple[d] = (T)1;
 			}
 		}
-
+		/// class's static function
 		static Vector zero()
 		{
-			Vector<Dim, CoordType> v;
+			Vector<N, T> v;
 			v.makeZero();
 			return v;
 		}
-
 		static Vector ones()
 		{
-			Vector<Dim, CoordType> v;
+			Vector<N, T> v;
 			v.makeOnes();
 			return v;
 		}
 
 		static Vector unit(int d)
 		{
-			Vector<Dim, CoordType> v;
+			Vector<N, T> v;
 			v.makeUnit(d);
 			return v;
 		}
 	protected:
-		std::array<coord_type, Dim> mTuple;
+		std::array<coord_type, N> mTuple;
 
 	};
 	
 	// Unary operations.
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator+(Vector<CoordType,Dim> const& v)
+	template <typename T, size_t N>
+	Vector<T,N> operator+(Vector<T,N> const& v)
 	{
 		return v;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator-(Vector<CoordType,Dim> const& v)
+	template <typename T, size_t N>
+	Vector<T,N> operator-(Vector<T,N> const& v)
 	{
-		Vector<CoordType,Dim> result;
-		for (int i = 0; i < Dim; ++i)
+		Vector<T,N> result;
+		for (int i = 0; i < N; ++i)
 		{
 			result[i] = -v[i];
 		}
@@ -155,219 +152,135 @@ namespace gte {
 	}
 
 	// Linear-algebraic operations.
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType, Dim>& operator+=(Vector<CoordType, Dim>& v0, Vector<CoordType, Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T, N>& operator+=(Vector<T, N>& v0, Vector<T, N> const& v1)
 	{
-		for (int i = 0; i < Dim; ++i)
+		for (int i = 0; i < N; ++i)
 		{
 			v0[i] += v1[i];
 		}
 		return v0;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType, Dim>& operator-=(Vector<CoordType, Dim>& v0, Vector<CoordType, Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T, N>& operator-=(Vector<T, N>& v0, Vector<T, N> const& v1)
 	{
-		for (int i = 0; i < Dim; ++i)
+		for (int i = 0; i < N; ++i)
 		{
 			v0[i] -= v1[i];
 		}
 		return v0;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType, Dim>& operator*=(Vector<CoordType, Dim>& v, CoordType scalar)
+	template <typename T, size_t N>
+	Vector<T, N>& operator*=(Vector<T, N>& v, T scalar)
 	{
-		for (int i = 0; i < Dim; ++i)
+		for (int i = 0; i < N; ++i)
 		{
 			v[i] *= scalar;
 		}
 		return v;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType, Dim>& operator/=(Vector<CoordType, Dim>& v, CoordType scalar)
+	template <typename T, size_t N>
+	Vector<T, N>& operator/=(Vector<T, N>& v, T scalar)
 	{
-		if (scalar != (CoordType)0)
+		if (scalar != (T)0)
 		{
-			CoordType invScalar = (CoordType)1 / scalar;
-			for (int i = 0; i < Dim; ++i)
+			T invScalar = (T)1 / scalar;
+			for (int i = 0; i < N; ++i)
 			{
 				v[i] *= invScalar;
 			}
 		}
 		else
 		{
-			for (int i = 0; i < Dim; ++i)
+			for (int i = 0; i < N; ++i)
 			{
-				v[i] = (CoordType)0;
+				v[i] = (T)0;
 			}
 		}
 		return v;
 	}
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator+(Vector<CoordType,Dim> const& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N> operator+(Vector<T,N> const& v0, Vector<T,N> const& v1)
 	{
-		Vector<CoordType,Dim> result = v0;
+		Vector<T,N> result = v0;
 		return result += v1;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator-(Vector<CoordType,Dim> const& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N> operator-(Vector<T,N> const& v0, Vector<T,N> const& v1)
 	{
-		Vector<CoordType,Dim> result = v0;
+		Vector<T,N> result = v0;
 		return result -= v1;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator*(Vector<CoordType,Dim> const& v, CoordType scalar)
+	template <typename T, size_t N>
+	Vector<T,N> operator*(Vector<T,N> const& v, T scalar)
 	{
-		Vector<CoordType,Dim> result = v;
+		Vector<T,N> result = v;
 		return result *= scalar;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator*(CoordType scalar, Vector<CoordType,Dim> const& v)
+	template <typename T, size_t N>
+	Vector<T,N> operator*(T scalar, Vector<T,N> const& v)
 	{
-		Vector<CoordType,Dim> result = v;
+		Vector<T,N> result = v;
 		return result *= scalar;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator/(Vector<CoordType,Dim> const& v, CoordType scalar)
+	template <typename T, size_t N>
+	Vector<T,N> operator/(Vector<T,N> const& v, T scalar)
 	{
-		Vector<CoordType,Dim> result = v;
+		Vector<T,N> result = v;
 		return result /= scalar;
 	}
 
 	// Componentwise algebraic operations.
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator*(Vector<CoordType,Dim> const& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N> operator*(Vector<T,N> const& v0, Vector<T,N> const& v1)
 	{
-		Vector<CoordType,Dim> result = v0;
+		Vector<T,N> result = v0;
 		return result *= v1;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim> operator/(Vector<CoordType,Dim> const& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N> operator/(Vector<T,N> const& v0, Vector<T,N> const& v1)
 	{
-		Vector<CoordType,Dim> result = v0;
+		Vector<T,N> result = v0;
 		return result /= v1;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim>& operator*=(Vector<CoordType,Dim>& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N>& operator*=(Vector<T,N>& v0, Vector<T,N> const& v1)
 	{
-		for (int i = 0; i < Dim; ++i)
+		for (int i = 0; i < N; ++i)
 		{
 			v0[i] *= v1[i];
 		}
 		return v0;
 	}
 
-	template <typename CoordType, size_t Dim>
-	Vector<CoordType,Dim>& operator/=(Vector<CoordType,Dim>& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	Vector<T,N>& operator/=(Vector<T,N>& v0, Vector<T,N> const& v1)
 	{
-		for (int i = 0; i < Dim; ++i)
+		for (int i = 0; i < N; ++i)
 		{
 			v0[i] /= v1[i];
 		}
 		return v0;
 	}
 
-	template <typename CoordType, size_t Dim>
-	CoordType Dot(Vector<CoordType,Dim> const& v0, Vector<CoordType,Dim> const& v1)
+	template <typename T, size_t N>
+	T Dot(Vector<T,N> const& v0, Vector<T,N> const& v1)
 	{
-		CoordType dot = v0[0] * v1[0];
-		for (int i = 1; i < Dim; ++i)
+		T dot = v0[0] * v1[0];
+		for (int i = 1; i < N; ++i)
 		{
 			dot += v0[i] * v1[i];
 		}
 		return dot;
-	}
-
-	template <typename CoordType, size_t Dim>
-	CoordType Length(Vector<CoordType,Dim> const& v, bool robust = false)
-	{
-		if (robust)
-		{
-			CoordType maxAbsComp = std::fabs(v[0]);
-			for (int i = 1; i < Dim; ++i)
-			{
-				CoordType absComp = std::fabs(v[i]);
-				if (absComp > maxAbsComp)
-				{
-					maxAbsComp = absComp;
-				}
-			}
-
-			CoordType length;
-			if (maxAbsComp > (CoordType)0)
-			{
-				Vector<CoordType,Dim> scaled = v / maxAbsComp;
-				length = maxAbsComp * std::sqrt(Dot(scaled, scaled));
-			}
-			else
-			{
-				length = (CoordType)0;
-			}
-			return length;
-		}
-		else
-		{
-			return std::sqrt(Dot(v, v));
-		}
-	}
-
-	template <typename CoordType, size_t Dim>
-	CoordType Normalize(Vector<CoordType,Dim>& v, bool robust = false)
-	{
-		if (robust)
-		{
-			CoordType maxAbsComp = std::fabs(v[0]);
-			for (int i = 1; i < Dim; ++i)
-			{
-				CoordType absComp = std::fabs(v[i]);
-				if (absComp > maxAbsComp)
-				{
-					maxAbsComp = absComp;
-				}
-			}
-
-			CoordType length;
-			if (maxAbsComp > (CoordType)0)
-			{
-				v /= maxAbsComp;
-				length = std::sqrt(Dot(v, v));
-				v /= length;
-				length *= maxAbsComp;
-			}
-			else
-			{
-				length = (CoordType)0;
-				for (int i = 0; i < Dim; ++i)
-				{
-					v[i] = (CoordType)0;
-				}
-			}
-			return length;
-		}
-		else
-		{
-			CoordType length = std::sqrt(Dot(v, v));
-			if (length > (CoordType)0)
-			{
-				v /= length;
-			}
-			else
-			{
-				for (int i = 0; i < Dim; ++i)
-				{
-					v[i] = (CoordType)0;
-				}
-			}
-			return length;
-		}
 	}
 	
 } //namespace gte

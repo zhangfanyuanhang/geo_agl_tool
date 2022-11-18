@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef MAT_BOOST_POLYGON_H
-#define MAT_BOOST_POLYGON_H
+#ifndef GTE_BOOST_POLYGON_H
+#define GTE_BOOST_POLYGON_H
 
 #include "Point.h"
 #include "Segment2.h"

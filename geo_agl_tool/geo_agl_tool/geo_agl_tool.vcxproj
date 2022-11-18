@@ -152,7 +152,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDIR)package\EasyX\lib\x64;$(TargetDir);C:\Python\Python311\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDIR)package\EasyX\lib\x64;$(TargetDir);C:\Python\Python311\libs;C:\Python\Python311;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>GeometricToolsEngine.lib;TriMesh.lib;GUI.lib;EasyXw.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -161,6 +161,7 @@
     <ClCompile Include="MedialAxis\MedialAxisTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="boost_geometry.h" />
     <ClInclude Include="MedialAxis\boost_polygon.h" />
     <ClInclude Include="MedialAxis\MedialAxisTransform.h" />
   </ItemGroup>

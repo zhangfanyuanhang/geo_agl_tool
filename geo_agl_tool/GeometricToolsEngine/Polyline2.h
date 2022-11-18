@@ -15,7 +15,7 @@ namespace gte {
 	template <typename PointType>
 	class Polyline2 :public Polyline<PointType>
 	{
-		static_assert(PointType::N == 2, "Dimension must be 2.");
+		static_assert(PointType::Dim == 2, "Dimension must be 2.");
 	public:
 		using  point_type = PointType;
 	public:

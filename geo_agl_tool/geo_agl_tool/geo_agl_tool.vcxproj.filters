@@ -32,5 +32,8 @@
     <ClInclude Include="MedialAxis\MedialAxisTransform.h">
       <Filter>MedialAxis</Filter>
     </ClInclude>
+    <ClInclude Include="boost_geometry.h">
+      <Filter>MedialAxis</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

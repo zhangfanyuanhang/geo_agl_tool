@@ -63,83 +63,33 @@ namespace gui {
 	///
 	void Graphic2::drawSource()
 	{
-		if (nullptr == mSourcePtr)
-			return;
-
-		const auto& type = mSourcePtr->getType();
-		if (type == typeid(gte::Polyline2i))
-		{
-			gte::Polyline2i* data = (gte::Polyline2i*)mSourcePtr;
-			drawPolyline(data);
-		}
-		if (type == typeid(gte::Polyline2d))
-		{
-			gte::Polyline2d* data = (gte::Polyline2d*)mSourcePtr;
-			drawPolyline(data);
-		}
-		if (type == typeid(gte::Polylines2i))
-		{
-			gte::Polylines2i* data = (gte::Polylines2i*)mSourcePtr;
-			for (size_t j = 0; j < data->size(); ++j)
-			{
-				drawPolyline(&(*data)[j]);
-			}
-		}
-		if (type == typeid(gte::Polylines2d))
-		{
-			gte::Polylines2d* data = (gte::Polylines2d*)mSourcePtr;
-			for (size_t j = 0; j < data->size(); ++j)
-			{
-				drawPolyline(&(*data)[j]);
-			}
-		}
-		
-		if (type == typeid(gte::Polygon2i))
-		{
-			gte::Polygon2i* data = (gte::Polygon2i*)mSourcePtr;
-			drawPolygon(data);
-		}
-		if (type == typeid(gte::Polygon2d))
-		{
-			gte::Polygon2d* data = (gte::Polygon2d*)mSourcePtr;
-			drawPolygon(data);
-		}
-		if (type == typeid(gte::Polygons2i))
-		{
-			gte::Polygons2i* data = (gte::Polygons2i*)mSourcePtr;
-			for (size_t j = 0; j < data->size(); ++j)
-			{
-				drawPolygon(&(*data)[j]);
-			}
-		}
-		if (type == typeid(gte::Polygons2d))
-		{
-			gte::Polygons2d* data = (gte::Polygons2d*)mSourcePtr;
-			for (size_t j = 0; j < data->size(); ++j)
-			{
-				drawPolygon(&(*data)[j]);
-			}
-		}
+		setlinecolor(RGB(255, 0, 0));
+		draw(mSourcePtr);
 	}
 	void Graphic2::drawData()
 	{
-		if (nullptr == mDataPtr)
+		setlinecolor(RGB(255, 255, 255));
+		draw(mDataPtr);
+	}
+	void Graphic2::draw(gte::Base* dataptr)
+	{
+		if (nullptr == dataptr)
 			return;
 
-		const auto& type = mDataPtr->getType();
+		const auto& type = dataptr->getType();
 		if (type == typeid(gte::Polyline2i))
 		{
-			gte::Polyline2i* data = (gte::Polyline2i*)mDataPtr;
+			gte::Polyline2i* data = (gte::Polyline2i*)dataptr;
 			drawPolyline(data);
 		}
 		if (type == typeid(gte::Polyline2d))
 		{
-			gte::Polyline2d* data = (gte::Polyline2d*)mDataPtr;
+			gte::Polyline2d* data = (gte::Polyline2d*)dataptr;
 			drawPolyline(data);
 		}
 		if (type == typeid(gte::Polylines2i))
 		{
-			gte::Polylines2i* data = (gte::Polylines2i*)mDataPtr;
+			gte::Polylines2i* data = (gte::Polylines2i*)dataptr;
 			for (size_t j = 0; j < data->size(); ++j)
 			{
 				drawPolyline(&(*data)[j]);
@@ -147,7 +97,7 @@ namespace gui {
 		}
 		if (type == typeid(gte::Polylines2d))
 		{
-			gte::Polylines2d* data = (gte::Polylines2d*)mDataPtr;
+			gte::Polylines2d* data = (gte::Polylines2d*)dataptr;
 			for (size_t j = 0; j < data->size(); ++j)
 			{
 				drawPolyline(&(*data)[j]);
@@ -156,17 +106,17 @@ namespace gui {
 
 		if (type == typeid(gte::Polygon2i))
 		{
-			gte::Polygon2i* data = (gte::Polygon2i*)mDataPtr;
+			gte::Polygon2i* data = (gte::Polygon2i*)dataptr;
 			drawPolygon(data);
 		}
 		if (type == typeid(gte::Polygon2d))
 		{
-			gte::Polygon2d* data = (gte::Polygon2d*)mDataPtr;
+			gte::Polygon2d* data = (gte::Polygon2d*)dataptr;
 			drawPolygon(data);
 		}
 		if (type == typeid(gte::Polygons2i))
 		{
-			gte::Polygons2i* data = (gte::Polygons2i*)mDataPtr;
+			gte::Polygons2i* data = (gte::Polygons2i*)dataptr;
 			for (size_t j = 0; j < data->size(); ++j)
 			{
 				drawPolygon(&(*data)[j]);
@@ -174,14 +124,13 @@ namespace gui {
 		}
 		if (type == typeid(gte::Polygons2d))
 		{
-			gte::Polygons2d* data = (gte::Polygons2d*)mDataPtr;
+			gte::Polygons2d* data = (gte::Polygons2d*)dataptr;
 			for (size_t j = 0; j < data->size(); ++j)
 			{
 				drawPolygon(&(*data)[j]);
 			}
 		}
 	}
-	
 	template <typename T>
 	void Graphic2::drawPolyline(T* data)
 	{

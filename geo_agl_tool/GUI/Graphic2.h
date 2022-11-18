@@ -31,6 +31,8 @@ namespace gui {
 		void drawSource();
 		void drawData();
 
+		void draw(gte::Base* dataptr);
+
 		template <typename T>
 		void drawPolyline(T* data);
 

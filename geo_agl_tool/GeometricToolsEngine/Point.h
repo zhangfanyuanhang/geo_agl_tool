@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GTE_POINT_HPP
-#define GTE_POINT_HPP
+#ifndef GTE_POINT_H
+#define GTE_POINT_H
 
 #include "Vector2.h"
 #include "Vector3.h"

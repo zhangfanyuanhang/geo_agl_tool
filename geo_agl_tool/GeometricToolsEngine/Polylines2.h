@@ -19,7 +19,7 @@ namespace gte {
 	public:
 		typedef PolylineType polyline_type;
 		using point_type = typename PolylineType::point_type;
-		static_assert(point_type::N == 2, "Dimension must be 2.");
+		static_assert(point_type::Dim == 2, "Dimension must be 2.");
 	public:
 		Polylines2() = default;
 		~Polylines2() = default;

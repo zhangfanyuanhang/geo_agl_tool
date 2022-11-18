@@ -16,7 +16,7 @@ namespace gte {
 	template <typename PointType>
 	class Polygon2 : public Polygon<PointType>
 	{
-		static_assert(PointType::N == 2, "Dimension must be 2.");
+		static_assert(PointType::Dim == 2, "Dimension must be 2.");
 	public:
 		typedef PointType point_type;
 	public:

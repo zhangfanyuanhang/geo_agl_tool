@@ -34,7 +34,7 @@ namespace gte {
 	template <typename T>
 	T Cross(T const& v0, T const& v1)
 	{
-		static_assert(T::N == 3 || T::N == 4, "Dimension must be 3 or 4.");
+		static_assert(T::Dim == 3 || T::Dim == 4, "Dimension must be 3 or 4.");
 
 		T result;
 		result.makeZero();

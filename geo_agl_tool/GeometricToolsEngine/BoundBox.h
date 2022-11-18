@@ -26,7 +26,7 @@ namespace gte {
 			for (int j = 1; j < size; ++j)
 			{
 				PointType const& vec = points[j];
-				for (int i = 0; i < PointType::N; ++i)
+				for (int i = 0; i < PointType::Dim; ++i)
 				{
 					if (vec[i] < aabb.mMinPoint[i])
 					{

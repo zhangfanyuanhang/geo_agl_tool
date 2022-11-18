@@ -21,7 +21,7 @@ namespace gte {
 		typedef PolygonType polygon_type;
 		using point_type = typename polygon_type::point_type;
 		
-		static_assert(point_type::N == 2, "Dimension must be 2.");
+		static_assert(point_type::Dim == 2, "Dimension must be 2.");
 	public:
 		Polygons2() = default;
 		~Polygons2() = default;
