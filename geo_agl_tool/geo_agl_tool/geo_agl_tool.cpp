@@ -4,7 +4,6 @@
 #include <iostream>
 #include <array>
 
-#include "MedialAxis/boost_polygon.h"
 #include "MedialAxis/MedialAxisTransform.h"
 
 //#include "easyx_show.h"
@@ -42,7 +41,7 @@ int main()
 		gte::Polygons2d plys;
 		gte::Point3d pt({0,0,100});
 		gte::Vector3d dir({ 0,0,1 });
-		std::string stl_path = "D:\\Models\\zigzag\\a.stl";
+		std::string stl_path = "E:\\Models\\zigzag\\a.stl";
 
 		TriMesh trimesh;
 		trimesh.init();

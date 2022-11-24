@@ -39,7 +39,7 @@ void MedialAxisTransform::ConstructVoronoi()
 	
 	for (auto iter = segms.begin(); iter != segms.end(); ++iter)
 	{
-		voronoi_builder.insert_segment(iter->p0().x(), iter->p0().y(), iter->p1().x(), iter->p1().y());
+		voronoi_builder.insert_segment((double_t)iter->p0().x(), (double_t)iter->p0().y(), (double_t)iter->p1().x(), (double_t)iter->p1().y());
 	}
 	voronoi_builder.construct(&mVoronoiDiagram);
 	///Voronoi±ß

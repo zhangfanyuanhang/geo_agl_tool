@@ -6,7 +6,6 @@
 #include "Point.h"
 #include "Polygons2.h"
 #include "Segment2.h"
-#include "boost_polygon.h"
 #include "boost/polygon/voronoi.hpp"
 
 #include "Graphic.h"
