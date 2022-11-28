@@ -5,6 +5,7 @@
 
 #include "Point.h"
 #include "Sequencer.h"
+#include "Polygon.h"
 
 namespace gte {
 
@@ -20,9 +21,11 @@ namespace gte {
 		Polyline(const std::list<point_type>& pts) :Sequencer<point_type>(pts) {}
 		Polyline(const std::vector<point_type>& pts) :Sequencer<point_type>(pts) {}
 		Polyline(std::initializer_list<point_type>& pts):Sequencer<point_type>(pts){}
-
+		template <typename Iter>
+		Polyline(const Iter begin, const Iter end) : Sequencer<point_type>(begin, end) {}
 	public:
 		inline const std::type_info& getType()override { return typeid(*this); }
+		//inline bool closure()override { return Open; }
 	};
 
 }

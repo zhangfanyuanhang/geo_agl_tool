@@ -11,6 +11,18 @@ namespace gte {
 	const double_t M_PI = 3.1415926;
 	const double_t ZOOM_IN = 1000.0;
 	const double_t ZOOM_OUT = 1.0 / ZOOM_IN;
+
+
+	enum ORDER {
+		OrderUndetermined = 0,
+		ClockWise = 1,
+		CounterClockWise = 2,
+	};
+	enum CLOSURE {
+		ClosureUndertermined = -1,
+		Open = 0,
+		Closed = 1,
+	};
 }
 
 

@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adapt_boost\adapt_boost.h" />
+    <ClInclude Include="adapt_boost\adapt_point.hpp" />
+    <ClInclude Include="adapt_boost\adapt_polygon.hpp" />
+    <ClInclude Include="adapt_boost\adapt_polygons.hpp" />
+    <ClInclude Include="adapt_boost\adapt_polyline.hpp" />
+    <ClInclude Include="adapt_boost\adapt_segment.hpp" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="BoundBox.h" />
     <ClInclude Include="Convertor.h" />

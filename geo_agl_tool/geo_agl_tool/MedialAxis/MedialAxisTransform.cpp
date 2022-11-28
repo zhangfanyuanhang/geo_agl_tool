@@ -5,6 +5,7 @@
 #include "Polyline2.h"
 
 #include <boost/geometry.hpp>
+#include "adapt_boost/adapt_boost.h"
 
 MedialAxisTransform::MedialAxisTransform(const gte::Polygons2i& plys):mPolygons(plys)
 {
@@ -49,6 +50,9 @@ void MedialAxisTransform::ConstructVoronoi()
 	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
 	const voronoi_cell* cell;
 	const voronoi_edge* edge;
+	//gte::Polyline2i* tmp_ply = (gte::Polyline2i*)&mPolygons[0];
+	gte::Polyline2i tmp_ply(mPolygons[0].begin(), mPolygons[0].end());
+
 	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
 	{
 		if (edge_iter->is_primary() && edge_iter->is_finite())
@@ -71,16 +75,28 @@ void MedialAxisTransform::ConstructVoronoi()
 					{
 						if (edge->vertex0() && edge->vertex1())
 						{
-							int64_t x = edge->vertex0()->x();
-							int64_t y = edge->vertex0()->y();
-							gte::Point2i pt0({ x,y });
-							gte::Point2i pt1({ x,y });
+							int64_t x0 = edge->vertex0()->x();
+							int64_t y0 = edge->vertex0()->y();
+							gte::Point2i pt0({ x0,y0 });
+
+							int64_t x1 = edge->vertex1()->x();
+							int64_t y1 = edge->vertex1()->y();
+							gte::Point2i pt1({ x1,y1 });
+
 							if (boost::polygon::contains(mPolygons[0], pt0) && boost::polygon::contains(mPolygons[0], pt1)
 								&& !boost::polygon::contains(mPolygons[1], pt0) && !boost::polygon::contains(mPolygons[1], pt1))
 							{
-								//boost::geometry::distance(pt0, mPolygons[0])
-								polyline.push_back(pt0);
-								polyline.push_back(pt1);
+								 double dist0 = boost::geometry::distance(pt0, tmp_ply);
+								 if (dist0 > 1000)
+								 {
+									 polyline.push_back(pt0);
+								 }
+								 double dist1 = boost::geometry::distance(pt1, tmp_ply);
+								 if (dist1 > 1000)
+								 {
+									 polyline.push_back(pt1);
+								 }
+								
 							}
 						}
 					}

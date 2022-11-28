@@ -14,7 +14,6 @@ namespace gte {
 	{
 	public:
 		typedef  PointType point_type;
-
 	public:
 		Polygon() = default;
 		~Polygon() = default;
@@ -26,6 +25,8 @@ namespace gte {
 	//! 重载实现	
 	public:
 		inline const std::type_info& getType()override { return typeid(*this); }
+		/*inline bool closure()override { return Closed; }
+		inline ORDER order()override { return point_order; }*/
 	public:	
 		//! 轴对称最大包围盒
 		void AABB(BoundingBox<point_type>& aabb) { AxiallyAlignedBoundingBox(&(*this)[0], this->size(), aabb); }

@@ -5,6 +5,7 @@
 
 #include "Point.h"
 #include "Polyline.h"
+#include "Polygon2.h"
 
 namespace gte {
 
@@ -22,15 +23,19 @@ namespace gte {
 		Polyline2() = default;
 		~Polyline2() = default;
 
-		Polyline2(const std::list<point_type>& pts) :Sequencer<point_type>(pts) {}
-		Polyline2(const std::vector<point_type>& pts) :Sequencer<point_type>(pts) {}
-		Polyline2(std::initializer_list<point_type>& pts) :Sequencer<point_type>(pts) {}
+		Polyline2(const std::list<point_type>& pts) :Polyline<point_type>(pts) {}
+		Polyline2(const std::vector<point_type>& pts) :Polyline<point_type>(pts) {}
+		Polyline2(std::initializer_list<point_type>& pts) :Polyline<point_type>(pts) {}
 
+		template <typename Iter>
+		Polyline2(const Iter begin, const Iter end) : Polyline<point_type>(begin, end) {}
 	public:
 		inline const std::type_info& getType()override { return typeid(*this); }
 	};
 
 }
+
+
 
 #endif // !GTE_POLYGON2_HPP
 

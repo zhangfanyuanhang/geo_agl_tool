@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GTE_POLYGONS2_HPP
-#define GTE_POLYGONS2_HPP
+#ifndef GTE_POLYGONS2_H
+#define GTE_POLYGONS2_H
 
 #include "Polygons.h"
 #include "Polygon2.h"
@@ -39,49 +39,5 @@ namespace gte {
 
 }
 
-namespace boost {
-	namespace polygon {
-
-		template <>
-		struct geometry_concept<gte::Polygons2i> { typedef polygon_set_concept type; };
-
-		//next we map to the concept through traits
-		template <>
-		struct polygon_set_traits<gte::Polygons2i> {
-			typedef int64_t coordinate_type;
-			typedef gte::Polygons2i::const_iterator iterator_type;
-			typedef gte::Polygons2i operator_arg_type;
-
-			static inline iterator_type begin(const gte::Polygons2i& polygon_set) {
-				return polygon_set.begin();
-			}
-
-			static inline iterator_type end(const gte::Polygons2i& polygon_set) {
-				return polygon_set.end();
-			}
-
-			//don't worry about these, just return false from them
-			static inline bool clean(const gte::Polygons2i& polygon_set) { return false; }
-			static inline bool sorted(const gte::Polygons2i& polygon_set) { return false; }
-		};
-
-		template <>
-		struct polygon_set_mutable_traits<gte::Polygons2i> {
-			template <typename input_iterator_type>
-			static inline void set(gte::Polygons2i& polygon_set, input_iterator_type input_begin, input_iterator_type input_end) {
-				polygon_set.clear();
-				//this is kind of cheesy. I am copying the unknown input geometry
-				//into my own polygon set and then calling get to populate the
-				//deque
-				polygon_set_data<int64_t> ps;
-				ps.insert(input_begin, input_end);
-				ps.get(polygon_set);
-				//if you had your own odd-ball polygon set you would probably have
-				//to iterate through each polygon at this point and do something
-				//extra
-			}
-		};
-	}
-}
 #endif // !GTE_POLYGON2_HPP
 

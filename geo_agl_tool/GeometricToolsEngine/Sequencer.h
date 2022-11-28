@@ -18,20 +18,28 @@ namespace gte {
 		typedef typename std::deque<data_type>::const_iterator const_iterator;
 		typedef typename std::deque<data_type>::iterator iterator;
 	
+		~Sequencer() = default;
 	//! 不支持单独构造
 	protected:
 		Sequencer() = default;
 		Sequencer(const std::list<data_type>& pts) :Base(), mData(pts.begin(), pts.end()) {}
 		Sequencer(const std::vector<data_type>& pts) :Base(),mData(pts.begin(), pts.end()){}
 		Sequencer(std::initializer_list<data_type>& pts) :Base(), mData(pts) {}
-	
+		template <typename Iter>
+		Sequencer(const Iter begin, const Iter end) : Base(), mData(begin, end) {}
+		Sequencer(const Sequencer&) = default;
 	//! 重载实现
 	public:
 		inline const std::type_info& getType()override { return typeid(*this); }
 	
+	//! 
+	public:
+		//virtual inline ORDER order();
+		//virtual inline bool closure();
 	//! 基本操作
 	public:
-		~Sequencer() = default;
+		
+		inline void push_front(data_type pt) { mData.push_front(pt); }
 		inline void push_back(data_type pt) { mData.push_back(pt); }
 		inline size_t size()const { return mData.size(); }
 		inline void resize(size_t size) { mData.resize(size); };
@@ -41,7 +49,6 @@ namespace gte {
 
 		inline const_iterator begin() const { return mData.begin(); }
 		inline const_iterator end() const { return mData.end(); }
-
 		inline iterator begin() { return mData.begin(); }
 		inline iterator end() { return mData.end(); }
 
