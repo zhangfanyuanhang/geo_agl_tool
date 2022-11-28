@@ -50,9 +50,8 @@ void MedialAxisTransform::ConstructVoronoi()
 	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
 	const voronoi_cell* cell;
 	const voronoi_edge* edge;
-	//gte::Polyline2i* tmp_ply = (gte::Polyline2i*)&mPolygons[0];
-	gte::Polyline2i tmp_ply(mPolygons[0].begin(), mPolygons[0].end());
-
+	const gte::Polyline2i* tmp_ply = (gte::Polyline2i*)&mPolygons[0];
+	//gte::Polyline2i tmp_ply(mPolygons[0].begin(), mPolygons[0].end());
 	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
 	{
 		if (edge_iter->is_primary() && edge_iter->is_finite())
@@ -86,12 +85,12 @@ void MedialAxisTransform::ConstructVoronoi()
 							if (boost::polygon::contains(mPolygons[0], pt0) && boost::polygon::contains(mPolygons[0], pt1)
 								&& !boost::polygon::contains(mPolygons[1], pt0) && !boost::polygon::contains(mPolygons[1], pt1))
 							{
-								 double dist0 = boost::geometry::distance(pt0, tmp_ply);
+								 double dist0 = boost::geometry::distance(pt0, *tmp_ply);
 								 if (dist0 > 1000)
 								 {
 									 polyline.push_back(pt0);
 								 }
-								 double dist1 = boost::geometry::distance(pt1, tmp_ply);
+								 double dist1 = boost::geometry::distance(pt1, *tmp_ply);
 								 if (dist1 > 1000)
 								 {
 									 polyline.push_back(pt1);

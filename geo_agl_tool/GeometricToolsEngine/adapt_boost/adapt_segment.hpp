@@ -8,7 +8,7 @@
 
 #include "..\Segment2.h"
 /// ------------------------------------------
-// Adapt gte::Segment2i to Boost.Geometry
+// Adapt gte::Segment2d to Boost.Geometry
 namespace boost {
 	namespace geometry {
 		namespace traits
@@ -55,10 +55,54 @@ namespace boost {
 					geometry::set<Dimension>(s.p1(), value);
 				}
 			};
+
+			//
+			template <>struct tag<gte::Segment2d>
+			{
+				typedef segment_tag type;
+			};
+
+			template <>struct point_type<gte::Segment2d>
+			{
+				typedef gte::Segment2d::point_type type;
+			};
+
+			template <std::size_t Dimension>
+			struct indexed_access<gte::Segment2d, 0, Dimension>
+			{
+				typedef gte::Segment2d segment_type;
+				typedef typename gte::Segment2d::point_type::coord_type coordinate_type;
+
+				static constexpr coordinate_type get(segment_type const& s)
+				{
+					return geometry::get<Dimension>(s.p0());
+				}
+
+				static void set(segment_type& s, coordinate_type const& value)
+				{
+					geometry::set<Dimension>(s.p0(), value);
+				}
+			};
+			template <std::size_t Dimension>
+			struct indexed_access<gte::Segment2d, 1, Dimension>
+			{
+				typedef gte::Segment2d segment_type;
+				typedef typename gte::Segment2d::point_type::coord_type coordinate_type;
+
+				static constexpr coordinate_type get(segment_type const& s)
+				{
+					return geometry::get<Dimension>(s.p1());
+				}
+
+				static void set(segment_type& s, coordinate_type const& value)
+				{
+					geometry::set<Dimension>(s.p1(), value);
+				}
+			};
 		}
 	}
 }
-// Adapt gte::Segment2i to Boost.Polygon
+// Adapt gte::Segment2d to Boost.Polygon
 namespace boost {
 	namespace polygon {
 		template <>
@@ -90,6 +134,40 @@ namespace boost {
 
 			static inline gte::Segment2i construct(const point_type& low, const point_type& high) {
 				return gte::Segment2i(low, high);
+			}
+		};
+
+		//
+
+		template <>
+		struct geometry_concept<gte::Segment2d> { typedef segment_concept type; };
+		template <>
+		struct segment_traits<gte::Segment2d> {
+			typedef typename int64_t coordinate_type;
+			typedef typename gte::Segment2d::point_type point_type;
+
+			static inline point_type get(const gte::Segment2d& segment, direction_1d dir) {
+				return dir.to_int() ? segment.p1() : segment.p0();
+			}
+		};
+
+		template <>
+		struct segment_mutable_traits<gte::Segment2d> {
+			typedef typename int64_t coordinate_type;
+			typedef typename gte::Segment2d::point_type point_type;
+
+			static inline void set(gte::Segment2d& segment, direction_1d dir, const point_type& point) {
+				if (dir.to_int())
+				{
+					segment.p1() = point;
+				}
+				else {
+					segment.p0() = point;
+				}
+			}
+
+			static inline gte::Segment2d construct(const point_type& low, const point_type& high) {
+				return gte::Segment2d(low, high);
 			}
 		};
 	}

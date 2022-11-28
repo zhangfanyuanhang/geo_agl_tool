@@ -3,9 +3,7 @@
 #ifndef GTE_POLYLINE_H
 #define GTE_POLYLINE_H
 
-#include "Point.h"
 #include "Sequencer.h"
-#include "Polygon.h"
 
 namespace gte {
 
@@ -25,7 +23,7 @@ namespace gte {
 		Polyline(const Iter begin, const Iter end) : Sequencer<point_type>(begin, end) {}
 	public:
 		inline const std::type_info& getType()override { return typeid(*this); }
-		//inline bool closure()override { return Open; }
+		//inline bool closure()override { return close; }
 	};
 
 }

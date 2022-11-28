@@ -15,10 +15,10 @@ namespace gui {
 
 		void initWindow(int width, int height) override;
 		void closeWindow() override;
-		void setSourceData(gte::Base* data) override;
-		void show(gte::Base* data)override;
+		void setSourceData(gte::PolyBase* data) override;
+		void show(gte::PolyBase* data)override;
 	private:
-		gte::Base* mDataPtr = nullptr;
+		gte::PolyBase* mDataPtr = nullptr;
 	};
 
 }

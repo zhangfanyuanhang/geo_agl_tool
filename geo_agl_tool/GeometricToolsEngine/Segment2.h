@@ -7,21 +7,9 @@
 #include "Segment.h"
 
 namespace gte {
-	template <typename PointType> class Segment2;
-	using Segment2i = Segment2<Point2i>;
-	using Segment2d = Segment2<Point2d>;
+	using Segment2i = Segment<Point2i>;
+	using Segment2d = Segment<Point2d>;
 
-	template <typename PointType>
-	class Segment2:public Segment<PointType>
-	{
-	public:
-		Segment2() = default;
-		~Segment2() = default;
-		Segment2(const PointType& pt0, const PointType& pt1):Segment<PointType>(pt0, pt1){};
-		Segment2(Segment<PointType>& segm):Segment<PointType>(segm) {};
-
-	private:
-	};
 
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef GTE_BASE_H
-#define GTE_BASE_H
+#ifndef GTE_PolyBase_H
+#define GTE_PolyBase_H
 
 #include <list>
 #include <vector>
@@ -11,11 +11,11 @@
 //! 虚基类
 //! 获得运行时类型信息
 namespace gte {
-	class Base
+	class PolyBase
 	{
 	public:
-		Base() = default;
-		~Base() = default;
+		PolyBase() = default;
+		~PolyBase() = default;
 
 		virtual const std::type_info& getType()=0;
 	};
@@ -23,5 +23,5 @@ namespace gte {
 
 
 
-#endif // !GTE_BASE_H
+#endif // !GTE_PolyBase_H
 

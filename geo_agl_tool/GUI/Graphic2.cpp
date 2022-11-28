@@ -21,11 +21,11 @@ namespace gui {
 	{
 		closegraph();
 	}
-	void Graphic2::setSourceData(gte::Base* data)
+	void Graphic2::setSourceData(gte::PolyBase* data)
 	{
 		mSourcePtr = data;
 	}
-	void Graphic2::show(gte::Base* data)
+	void Graphic2::show(gte::PolyBase* data)
 	{
 		mDataPtr = data;
 		drawAll();
@@ -71,7 +71,7 @@ namespace gui {
 		setlinecolor(RGB(255, 255, 255));
 		draw(mDataPtr);
 	}
-	void Graphic2::draw(gte::Base* dataptr)
+	void Graphic2::draw(gte::PolyBase* dataptr)
 	{
 		if (nullptr == dataptr)
 			return;

@@ -4,14 +4,14 @@
 #define GTE_SEQUENCER_H
 
 
-#include "Base.h"
+#include "PolyBase.h"
 
 //! 序列容器类 deque
 //! 随机访问
 //! 插入和删除
 namespace gte {
 	template <typename T>
-	class Sequencer: public Base
+	class Sequencer: public PolyBase
 	{
 	public:
 		typedef T data_type;
@@ -22,11 +22,11 @@ namespace gte {
 	//! 不支持单独构造
 	protected:
 		Sequencer() = default;
-		Sequencer(const std::list<data_type>& pts) :Base(), mData(pts.begin(), pts.end()) {}
-		Sequencer(const std::vector<data_type>& pts) :Base(),mData(pts.begin(), pts.end()){}
-		Sequencer(std::initializer_list<data_type>& pts) :Base(), mData(pts) {}
+		Sequencer(const std::list<data_type>& pts) :PolyBase(), mData(pts.begin(), pts.end()) {}
+		Sequencer(const std::vector<data_type>& pts) :PolyBase(),mData(pts.begin(), pts.end()){}
+		Sequencer(std::initializer_list<data_type>& pts) :PolyBase(), mData(pts) {}
 		template <typename Iter>
-		Sequencer(const Iter begin, const Iter end) : Base(), mData(begin, end) {}
+		Sequencer(const Iter begin, const Iter end) : PolyBase(), mData(begin, end) {}
 		Sequencer(const Sequencer&) = default;
 	//! 重载实现
 	public:

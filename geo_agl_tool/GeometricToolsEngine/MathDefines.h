@@ -18,11 +18,6 @@ namespace gte {
 		ClockWise = 1,
 		CounterClockWise = 2,
 	};
-	enum CLOSURE {
-		ClosureUndertermined = -1,
-		Open = 0,
-		Closed = 1,
-	};
 }
 
 

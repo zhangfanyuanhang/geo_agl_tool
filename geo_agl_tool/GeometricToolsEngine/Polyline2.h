@@ -8,30 +8,9 @@
 #include "Polygon2.h"
 
 namespace gte {
+	using Polyline2i = Polyline<Point2i>;
+	using Polyline2d = Polyline<Point2d>;
 
-	template <typename PointType> class Polyline2;
-	using Polyline2i = Polyline2<Point2i>;
-	using Polyline2d = Polyline2<Point2d>;
-
-	template <typename PointType>
-	class Polyline2 :public Polyline<PointType>
-	{
-		static_assert(PointType::Dim == 2, "Dimension must be 2.");
-	public:
-		using  point_type = PointType;
-	public:
-		Polyline2() = default;
-		~Polyline2() = default;
-
-		Polyline2(const std::list<point_type>& pts) :Polyline<point_type>(pts) {}
-		Polyline2(const std::vector<point_type>& pts) :Polyline<point_type>(pts) {}
-		Polyline2(std::initializer_list<point_type>& pts) :Polyline<point_type>(pts) {}
-
-		template <typename Iter>
-		Polyline2(const Iter begin, const Iter end) : Polyline<point_type>(begin, end) {}
-	public:
-		inline const std::type_info& getType()override { return typeid(*this); }
-	};
 
 }
 

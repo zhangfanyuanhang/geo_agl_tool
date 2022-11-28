@@ -50,7 +50,7 @@ private:
 	std::vector<gte::Point2i> mMATPoints;
 
 	gui::Graphic* mGraphicPtr;
-	gte::Base* mPolys;
+	gte::PolyBase* mPolys;
 };
 
 

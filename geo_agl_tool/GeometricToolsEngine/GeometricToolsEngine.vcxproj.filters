@@ -66,9 +66,6 @@
     <ClInclude Include="Polylines.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Base.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Polylines2.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -95,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="adapt_boost\adapt_polygons.hpp">
       <Filter>头文件\adapt_boost</Filter>
+    </ClInclude>
+    <ClInclude Include="PolyBase.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

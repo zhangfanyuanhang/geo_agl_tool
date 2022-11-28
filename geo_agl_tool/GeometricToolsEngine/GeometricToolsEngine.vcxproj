@@ -25,7 +25,7 @@
     <ClInclude Include="adapt_boost\adapt_polygons.hpp" />
     <ClInclude Include="adapt_boost\adapt_polyline.hpp" />
     <ClInclude Include="adapt_boost\adapt_segment.hpp" />
-    <ClInclude Include="Base.h" />
+    <ClInclude Include="PolyBase.h" />
     <ClInclude Include="BoundBox.h" />
     <ClInclude Include="Convertor.h" />
     <ClInclude Include="MathDefines.h" />

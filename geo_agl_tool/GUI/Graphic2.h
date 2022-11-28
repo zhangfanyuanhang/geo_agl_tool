@@ -19,9 +19,9 @@ namespace gui {
 
 		void initWindow(int width, int height) override;
 		void closeWindow() override;
-		void setSourceData(gte::Base* data) override;
+		void setSourceData(gte::PolyBase* data) override;
 
-		void show(gte::Base* data)override;
+		void show(gte::PolyBase* data)override;
 		
 
 	private:
@@ -31,7 +31,7 @@ namespace gui {
 		void drawSource();
 		void drawData();
 
-		void draw(gte::Base* dataptr);
+		void draw(gte::PolyBase* dataptr);
 
 		template <typename T>
 		void drawPolyline(T* data);
@@ -39,7 +39,7 @@ namespace gui {
 		template <typename T>
 		void drawPolygon(T* data);
 	private:
-		gte::Base* mDataPtr = nullptr;
+		gte::PolyBase* mDataPtr = nullptr;
 	};
 }
 
