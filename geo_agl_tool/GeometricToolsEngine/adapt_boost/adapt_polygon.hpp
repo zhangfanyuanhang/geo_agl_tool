@@ -6,7 +6,7 @@
 #include <boost/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
-#include "..\Polygon2.h"
+#include "..\Polygon2.hpp"
 /// ----------------------------------------------------------------------------
 
 // Adapt gte::Polygon2i to Boost.Geometry
@@ -102,7 +102,7 @@ namespace boost
 	};
 }
 // Boost.Range
-namespace gte {
+//namespace gte {
 	// adapt gte::Polygon2i for Boost.Range
 	inline gte::Polygon2i::iterator range_begin(gte::Polygon2i& ply) { return ply.begin(); }
 	inline gte::Polygon2i::iterator range_end(gte::Polygon2i& ply) { return ply.end(); }
@@ -115,7 +115,7 @@ namespace gte {
 	inline gte::Polygon2d::const_iterator range_begin(const gte::Polygon2d& ply) { return ply.begin(); }
 	inline gte::Polygon2d::const_iterator range_end(const gte::Polygon2d& ply) { return ply.end(); }
 	inline std::size_t range_calculate_size(const gte::Polygon2d& ply) { return ply.size(); }
-}
+//}
 
 
 /// --------------------------------------------------------------

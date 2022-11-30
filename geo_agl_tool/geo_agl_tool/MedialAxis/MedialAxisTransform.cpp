@@ -1,11 +1,6 @@
 
 #include "MedialAxisTransform.h"
 #include "Graphic2.h"
-#include "Polylines2.h"
-#include "Polyline2.h"
-
-#include <boost/geometry.hpp>
-#include "adapt_boost/adapt_boost.h"
 
 MedialAxisTransform::MedialAxisTransform(const gte::Polygons2i& plys):mPolygons(plys)
 {
@@ -34,102 +29,127 @@ void  MedialAxisTransform::show()
 }
 void MedialAxisTransform::ConstructVoronoi()
 {
-	std::vector<gte::Segment2i> segms;
-	mPolygons.Segments(&segms);
+	std::vector<gte::Segment2i> segments;
 	boost::polygon::voronoi_builder<int64_t, boost::polygon::detail::my_voronoi_ctype_traits<int64_t>> voronoi_builder;
-	
-	for (auto iter = segms.begin(); iter != segms.end(); ++iter)
+	size_t ply_size = mPolygons.size();
+	for (size_t i = 0; i < ply_size; i++)
 	{
-		voronoi_builder.insert_segment((double_t)iter->p0().x(), (double_t)iter->p0().y(), (double_t)iter->p1().x(), (double_t)iter->p1().y());
+		size_t pt_size = mPolygons[i].size();
+		for (size_t j = 0; j < pt_size; j++)
+		{
+			segments.push_back({ gte::Point2i(mPolygons[i][j].x(), mPolygons[i][j].y()), gte::Point2i(mPolygons[i][(j + 1) % pt_size].x(), mPolygons[i][(j + 1) % pt_size].y()) });
+			voronoi_builder.insert_segment(mPolygons[i][j].x(), mPolygons[i][j].y(), mPolygons[i][(j+1)%pt_size].x(), mPolygons[i][(j + 1) % pt_size].y());
+		}
 	}
 	voronoi_builder.construct(&mVoronoiDiagram);
 	///Voronoi±ß
-	gte::Polygon2i tmpply;
-	//std::vector<gte::Point2i> pts;
-	gte::Polylines2i* polylines = new gte::Polylines2i;
 	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
-	const voronoi_cell* cell;
-	const voronoi_edge* edge;
-	const gte::Polyline2i* tmp_ply = (gte::Polyline2i*)&mPolygons[0];
-	//gte::Polyline2i tmp_ply(mPolygons[0].begin(), mPolygons[0].end());
 	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
 	{
+		edge_iter->color(0);
 		if (edge_iter->is_primary() && edge_iter->is_finite())
 		{
-			gte::Polyline2i polyline;
-			/*if (edge_iter->vertex0() && edge_iter->vertex1())
+			std::size_t index = edge_iter->cell()->source_index();
+			std::size_t twin_index = edge_iter->twin()->cell()->source_index();
+			if (boost::geometry::distance(segments[index], segments[twin_index]) > gte::ZOOM_IN)
 			{
-				int64_t x = edge_iter->vertex0()->x();
-				int64_t y = edge_iter->vertex0()->y();
-				polyline.push_back({ (int64_t)edge_iter->vertex0()->x(),(int64_t)edge_iter->vertex0()->y() });
-				polyline.push_back({ (int64_t)edge_iter->vertex1()->x(),(int64_t)edge_iter->vertex1()->y() });
-			}*/
-			cell = edge_iter->cell();
-			if (cell)
-			{
-				edge = cell->incident_edge();
-				do
+				const voronoi_vertex* vertex0 = edge_iter->vertex0();
+				const voronoi_vertex* vertex1 = edge_iter->vertex1();
+				gte::Point2i pt0(vertex0->x(), vertex0->y());
+				gte::Point2i pt1(vertex1->x(), vertex1->y());
+				if (mPolygons.within(pt0) && mPolygons.within(pt1))
 				{
-					//if (edge->is_primary())
-					{
-						if (edge->vertex0() && edge->vertex1())
-						{
-							int64_t x0 = edge->vertex0()->x();
-							int64_t y0 = edge->vertex0()->y();
-							gte::Point2i pt0({ x0,y0 });
-
-							int64_t x1 = edge->vertex1()->x();
-							int64_t y1 = edge->vertex1()->y();
-							gte::Point2i pt1({ x1,y1 });
-
-							if (boost::polygon::contains(mPolygons[0], pt0) && boost::polygon::contains(mPolygons[0], pt1)
-								&& !boost::polygon::contains(mPolygons[1], pt0) && !boost::polygon::contains(mPolygons[1], pt1))
-							{
-								 double dist0 = boost::geometry::distance(pt0, *tmp_ply);
-								 if (dist0 > 1000)
-								 {
-									 polyline.push_back(pt0);
-								 }
-								 double dist1 = boost::geometry::distance(pt1, *tmp_ply);
-								 if (dist1 > 1000)
-								 {
-									 polyline.push_back(pt1);
-								 }
-								
-							}
-						}
-					}
-					
-					edge = edge->next();
-				} while (edge && edge != cell->incident_edge());
-				polylines->push_back(polyline);
-				//break;
+					edge_iter->color(1);
+				}
 			}
 		}
-		
+	}
+	gte::Polylines2i* polylines = new gte::Polylines2i;
+	edge_iter = mVoronoiDiagram.edges().begin();
+	std::map<const voronoi_edge*, bool> flag;
+	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
+	{
+		if (flag[&*edge_iter] || flag[&*edge_iter->twin()])
+			continue;
+
+		if (1 == edge_iter->color())
+		{
+			std::deque<const voronoi_edge*> edges;
+			flag[&*edge_iter] = true;
+			edges.push_back(&*edge_iter);
+			while (true)
+			{
+				const voronoi_edge* cur_edge = edges.front();
+				const voronoi_edge* next_edge = NULL;
+				int count = 0;
+				do {
+					cur_edge = cur_edge->rot_prev();
+					if (1 == cur_edge->color())
+					{
+						++count;
+						if (!flag[cur_edge] && !flag[cur_edge->twin()])
+							next_edge = cur_edge;
+					}
+				} while (cur_edge != edges.front());
+				if (2 == count)
+				{
+					if (NULL == next_edge || next_edge == edges.back())
+						break;
+					edges.push_front(next_edge->twin());
+					flag[edges.front()] = true;
+					flag[edges.front()->twin()] = true;
+				}
+				else {
+					break;
+				}
+			}
+			while (true)
+			{
+				const voronoi_edge* cur_edge = edges.back();
+				const voronoi_edge* next_edge = NULL;
+				int count = 0;
+				do {
+					cur_edge = cur_edge->rot_next();
+					if (1 == cur_edge->color())
+					{
+						++count;
+						if (!flag[cur_edge] && !flag[cur_edge->twin()])
+							next_edge = cur_edge;
+					}
+				} while (cur_edge != edges.back());
+				if (2 == count)
+				{
+					if (NULL == next_edge || next_edge == edges.front())
+						break;
+					edges.push_back(next_edge);
+					flag[edges.back()] = true;
+					flag[edges.back()->twin()] = true;
+					
+				}
+				else {
+					break;
+				}
+			}
+			gte::Polyline2i polyline;
+			size_t edges_size = edges.size();
+			for (size_t k = 0; k < edges_size; k++)
+			{
+				gte::Point2i pt0(edges[k]->vertex0()->x(), edges[k]->vertex0()->y());
+				if(polyline.empty())
+					polyline.push_back(pt0);
+				else {
+					if (polyline.back() != pt0)
+						polyline.push_back(pt0);
+
+				}
+				gte::Point2i pt1(edges[k]->vertex1()->x(), edges[k]->vertex1()->y());
+				if (polyline.back() != pt1)
+					polyline.push_back(pt1);
+			}
+			if(polyline.size())
+				polylines->push_back(polyline);
+			
+		}
 	}
 	mPolys = polylines;
-
-	
-	/*const voronoi_diagram::edge_type *cur_edge = &*edge_iter;
-	const voronoi_diagram::edge_type *nex_edge;
-	while (true)
-	{
-		if (cur_edge->vertex0())
-		{
-			int64_t x = cur_edge->vertex0()->x();
-			int64_t y = cur_edge->vertex0()->y();
-			pts.push_back({ x,y });
-		}
-
-		const voronoi_diagram::edge_type *nex_edge = cur_edge->next();
-		if (nullptr == nex_edge)
-			break;
-		if (nex_edge == &*edge_iter)
-		{
-			break;
-		}
-		cur_edge = nex_edge;
-	}*/
-	
 }

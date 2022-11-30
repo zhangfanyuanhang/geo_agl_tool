@@ -6,7 +6,7 @@
 #include <boost/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
-#include "..\Point.h"
+#include "..\Point.hpp"
 
 /// --------------------------------------------------------
 // Adapt gte::Point2i to Boost.Geometry

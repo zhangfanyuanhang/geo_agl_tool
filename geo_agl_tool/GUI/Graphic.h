@@ -4,7 +4,7 @@
 #ifndef GUI_GRAPHIC_H
 #define GUI_GRAPHIC_H
 
-#include "PolyBase.h"
+#include "PolyBase.hpp"
 
 namespace gui{
 

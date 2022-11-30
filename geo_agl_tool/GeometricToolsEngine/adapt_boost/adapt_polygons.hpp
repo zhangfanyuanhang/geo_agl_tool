@@ -6,11 +6,55 @@
 #include <boost/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
-#include "..\Polygons2.h"
+#include "..\Polygons2.hpp"
 
 namespace gte {
-	typedef std::pair<gte::Polygons2i::iterator, gte::Polygons2i::iterator> holes_iterator;
-	typedef std::pair<gte::Polygons2i::const_iterator, gte::Polygons2i::const_iterator> holes_const_iterator;
+
+	typedef gte::Polygons2i::iterator PolygonRingIterator;
+	typedef gte::Polygons2i::const_iterator ConstPolygonRingIterator;
+
+	class CustomPolygonRingRange
+	{
+		PolygonRingIterator _begin;
+		PolygonRingIterator _end;
+
+		bool isIterSet;
+
+		ConstPolygonRingIterator _cbegin;
+		ConstPolygonRingIterator _cend;
+
+		bool isCIterSet;
+
+	public:
+
+		CustomPolygonRingRange(PolygonRingIterator begin, PolygonRingIterator end) : _begin(begin), _end(end), isIterSet(true) {}
+		CustomPolygonRingRange(ConstPolygonRingIterator begin, ConstPolygonRingIterator end) : _cbegin(begin), _cend(end), isCIterSet(true) {}
+
+		PolygonRingIterator begin()
+		{
+			assert(isIterSet);
+			return _begin;
+		}
+
+		ConstPolygonRingIterator cbegin() const
+		{
+			assert(isCIterSet);
+			return _cbegin;
+		}
+
+		PolygonRingIterator end()
+		{
+			assert(isIterSet);
+			return _end;
+		}
+
+		ConstPolygonRingIterator cend() const
+		{
+			assert(isCIterSet);
+			return _cend;
+		}
+	};
+
 }
 // Adapt gte::Polygons2i to Boost.Geometry
 namespace boost {
@@ -20,8 +64,8 @@ namespace boost {
 			template <>struct tag<gte::Polygons2i> { typedef polygon_tag type; };
 			template<> struct ring_const_type<gte::Polygons2i> { typedef const gte::Polygon2i& type; };
 			template<> struct ring_mutable_type<gte::Polygons2i> { typedef gte::Polygon2i& type; };
-			template<> struct interior_const_type<gte::Polygons2i> { typedef const gte::Polygon2i type; };
-			template<> struct interior_mutable_type<gte::Polygons2i> { typedef gte::Polygon2i type; };
+			template<> struct interior_const_type<gte::Polygons2i> { typedef const gte::CustomPolygonRingRange type; };
+			template<> struct interior_mutable_type<gte::Polygons2i> { typedef gte::CustomPolygonRingRange type; };
 
 			template<> struct exterior_ring<gte::Polygons2i>
 			{
@@ -34,17 +78,15 @@ namespace boost {
 					return (p[0]);
 				}
 			};
-
 			template<> struct interior_rings<gte::Polygons2i>
 			{
-				static gte::holes_iterator& get(gte::Polygons2i& p)
+				static gte::CustomPolygonRingRange get(gte::Polygons2i& p)
 				{
-					gte::holes_iterator aa = std::make_pair(++p.begin(), p.end());
-					return aa;
+					return gte::CustomPolygonRingRange(gte::PolygonRingIterator(++p.begin()), gte::PolygonRingIterator(p.end()));
 				}
-				static const gte::holes_const_iterator& get(gte::Polygons2i const& p)
+				static const gte::CustomPolygonRingRange get(gte::Polygons2i const& p)
 				{
-					return std::make_pair(++p.begin(), p.end());
+					return gte::CustomPolygonRingRange(gte::ConstPolygonRingIterator(++p.begin()), gte::ConstPolygonRingIterator(p.end()));
 				}
 			};
 		}
@@ -53,35 +95,35 @@ namespace boost {
 namespace boost
 {
 	template <>
-	struct range_iterator<gte::Polygons2i> { typedef gte::Polygons2i::iterator type; };
+	struct range_iterator<gte::CustomPolygonRingRange> { typedef gte::PolygonRingIterator type; };
 
 	template<>
-	struct range_const_iterator<gte::Polygons2i> { typedef gte::Polygons2i::const_iterator type; };
-
+	struct range_const_iterator<gte::CustomPolygonRingRange> { typedef gte::ConstPolygonRingIterator type; };
 } // namespace 'boost'
 
 
 // The required Range functions. These should be defined in the same namespace
 // as Ring.
 namespace gte {
-	inline Polygons2i::iterator range_begin(holes_iterator& r)
+
+	inline PolygonRingIterator range_begin(CustomPolygonRingRange& r)
 	{
-		return r.first;
+		return r.begin();
 	}
 
-	inline Polygons2i::const_iterator range_begin(holes_const_iterator& r)
+	inline ConstPolygonRingIterator range_begin(const CustomPolygonRingRange& r)
 	{
-		return r.first;
+		return r.cbegin();
 	}
 
-	inline Polygons2i::iterator range_end(holes_iterator& r)
+	inline PolygonRingIterator range_end(CustomPolygonRingRange& r)
 	{
-		return r.second;
+		return r.end();
 	}
 
-	inline Polygons2i::const_iterator range_end(holes_const_iterator& r)
+	inline ConstPolygonRingIterator range_end(const CustomPolygonRingRange& r)
 	{
-		return r.second;
+		return r.cend();
 	}
 }
 

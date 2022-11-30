@@ -7,10 +7,10 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 
-#include "Point.h"
-#include "Vector3.h"
-#include "Polygon2.h"
-#include "Polygons2.h"
+#include "Point.hpp"
+#include "Vector3.hpp"
+#include "Polygon2.hpp"
+#include "Polygons2.hpp"
 
 class TriMesh
 {

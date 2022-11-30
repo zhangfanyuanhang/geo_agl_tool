@@ -3,9 +3,7 @@
 #ifndef MAT_MEDIAL_AXIS_TRANSFORM_H
 #define MAT_MEDIAL_AXIS_TRANSFORM_H
 
-#include "Point.h"
-#include "Polygons2.h"
-#include "Segment2.h"
+#include "GeometricToolsEngine.h"
 #include "boost/polygon/voronoi.hpp"
 
 #include "Graphic.h"
@@ -37,6 +35,23 @@ class MedialAxisTransform
 	using voronoi_cell = boost::polygon::voronoi_cell<double_t>;
 	using voronoi_edge = boost::polygon::voronoi_edge<double_t>;
 	using voronoi_vertex = boost::polygon::voronoi_vertex<double_t>;
+
+	struct MATHalfEdge;
+	struct MATVertex {
+		MATHalfEdge * he;
+		voronoi_vertex* mVertex;
+	};
+	struct MATEdge {
+		MATHalfEdge * he;
+		std::deque<voronoi_edge*> mEdge;
+	};
+	struct MATHalfEdge {
+		MATHalfEdge * next;
+		MATHalfEdge * pre;
+		MATHalfEdge * twin;
+		MATVertex * origin;
+		MATEdge * edge;
+	};
 public:
 	MedialAxisTransform(const gte::Polygons2i& plys);
 	~MedialAxisTransform();
@@ -51,6 +66,10 @@ private:
 
 	gui::Graphic* mGraphicPtr;
 	gte::PolyBase* mPolys;
+
+	std::vector<MATHalfEdge *> halfEdges;
+	std::vector<MATVertex *> vertices;
+	std::vector<MATEdge *> edges;
 };
 
 

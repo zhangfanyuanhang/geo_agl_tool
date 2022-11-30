@@ -6,7 +6,7 @@
 #include <boost/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
-#include "..\Segment2.h"
+#include "..\Segment2.hpp"
 /// ------------------------------------------
 // Adapt gte::Segment2d to Boost.Geometry
 namespace boost {

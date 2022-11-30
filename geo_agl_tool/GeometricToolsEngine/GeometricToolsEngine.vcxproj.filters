@@ -18,61 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Point.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygon2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygons.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polygons2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Segment.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Segment2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Convertor.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MathDefines.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="BoundBox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Sequencer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polyline.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polylines.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polylines2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Polyline2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="adapt_boost\adapt_segment.hpp">
@@ -93,7 +39,64 @@
     <ClInclude Include="adapt_boost\adapt_polygons.hpp">
       <Filter>头文件\adapt_boost</Filter>
     </ClInclude>
-    <ClInclude Include="PolyBase.h">
+    <ClInclude Include="GeometricToolsEngine.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygons.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygons2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequencer.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PolyBase.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundBox.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Convertor.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polyline.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polyline2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polylines.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Polylines2.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Segment2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

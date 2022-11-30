@@ -1,9 +1,9 @@
 
 #include "Graphic2.h"
-#include "Polylines2.h"
-#include "Polyline2.h"
-#include "Polygons2.h"
-#include "Polygon2.h"
+#include "Polylines2.hpp"
+#include "Polyline2.hpp"
+#include "Polygons2.hpp"
+#include "Polygon2.hpp"
 
 namespace gui {
 
@@ -63,12 +63,12 @@ namespace gui {
 	///
 	void Graphic2::drawSource()
 	{
-		setlinecolor(RGB(255, 0, 0));
+		setlinecolor(RGB(255, 255, 255));
 		draw(mSourcePtr);
 	}
 	void Graphic2::drawData()
 	{
-		setlinecolor(RGB(255, 255, 255));
+		setlinecolor(RGB(255, 0, 0));
 		draw(mDataPtr);
 	}
 	void Graphic2::draw(gte::PolyBase* dataptr)
@@ -90,8 +90,16 @@ namespace gui {
 		if (type == typeid(gte::Polylines2i))
 		{
 			gte::Polylines2i* data = (gte::Polylines2i*)dataptr;
-			for (size_t j = 0; j < data->size(); ++j)
+			size_t ply_size = data->size();
+			size_t step = 50;
+			for (size_t j = 0; j < ply_size; ++j)
 			{
+				if (0 == j % 3)
+					setlinecolor(RGB(255, 0, 0));
+				if (1 == j % 3)
+					setlinecolor(RGB(0, 255, 0));
+				if (2 == j % 3)
+					setlinecolor(RGB(0, 0, 255));
 				drawPolyline(&(*data)[j]);
 			}
 		}

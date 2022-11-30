@@ -5,7 +5,7 @@
 #include <boost/geometry.hpp>
 #include <boost/polygon/polygon.hpp>
 
-#include "..\Polyline2.h"
+#include "..\Polyline2.hpp"
 
 // Adapt gte::Polygon2i to Boost.Geometry
 namespace boost {

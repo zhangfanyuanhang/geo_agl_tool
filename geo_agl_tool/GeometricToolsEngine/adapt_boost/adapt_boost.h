@@ -10,6 +10,7 @@
 #include "adapt_segment.hpp"
 #include "adapt_polyline.hpp"
 #include "adapt_polygon.hpp"
+#include "adapt_polygons.hpp"
 
 #endif // !GTE_ADAPT_BOOST_H
 
