@@ -91,15 +91,21 @@ namespace gui {
 		{
 			gte::Polylines2i* data = (gte::Polylines2i*)dataptr;
 			size_t ply_size = data->size();
-			size_t step = 50;
 			for (size_t j = 0; j < ply_size; ++j)
 			{
-				if (0 == j % 3)
+				if (0 == j % 6)
 					setlinecolor(RGB(255, 0, 0));
-				if (1 == j % 3)
+				if (1 == j % 6)
 					setlinecolor(RGB(0, 255, 0));
-				if (2 == j % 3)
+				if (2 == j % 6)
 					setlinecolor(RGB(0, 0, 255));
+				if (3 == j % 6)
+					setlinecolor(RGB(255, 255, 0));
+				if (4 == j % 6)
+					setlinecolor(RGB(0, 255, 255));
+				if (5 == j % 6)
+					setlinecolor(RGB(255, 0, 255));
+
 				drawPolyline(&(*data)[j]);
 			}
 		}

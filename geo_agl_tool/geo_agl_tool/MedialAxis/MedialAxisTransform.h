@@ -35,7 +35,15 @@ class MedialAxisTransform
 	using voronoi_cell = boost::polygon::voronoi_cell<double_t>;
 	using voronoi_edge = boost::polygon::voronoi_edge<double_t>;
 	using voronoi_vertex = boost::polygon::voronoi_vertex<double_t>;
+	using source_category = boost::polygon::SourceCategory;
 
+	enum MATType {
+		MAT_UNKNOWN = 0,
+		MAT_EDGE_SKL = 1,
+		MAT_EDGE_SKL_FORK = 2,
+
+		MAT_EDGE_SKL_BRANCH = 10,
+	};
 	struct MATHalfEdge;
 	struct MATVertex {
 		MATHalfEdge * he;
@@ -58,6 +66,14 @@ public:
 
 	void ConstructVoronoi();
 	void show();
+
+private:
+	void travelInCell(const voronoi_edge* src,std::deque<const voronoi_edge*>& dst);
+	size_t countMATEdge(const voronoi_edge* src);
+	bool backNextTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst);
+	bool frontPrevTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst);
+	bool isConnect(const voronoi_edge* src, const voronoi_edge* dst);
+	void connectCellMATEdge(std::deque<std::deque<const voronoi_edge*>>& src, std::deque<std::deque<const voronoi_edge*>>& dst);
 private:
 	voronoi_diagram mVoronoiDiagram;
 private:
