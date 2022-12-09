@@ -22,7 +22,7 @@ MedialAxisTransform::~MedialAxisTransform()
 }
 void  MedialAxisTransform::show()
 {
-	mGraphicPtr->initWindow(1000, 1000);
+	mGraphicPtr->initWindow(1600, 1000);
 	mGraphicPtr->setSourceData(&mPolygons);
 	mGraphicPtr->show(mPolys);
 	mGraphicPtr->closeWindow();
@@ -43,6 +43,109 @@ void MedialAxisTransform::ConstructVoronoi()
 		}
 	}
 	voronoi_builder.construct(&mVoronoiDiagram);
+	//! 中心点
+	
+	for (voronoi_diagram::const_vertex_iterator vertex_iter = mVoronoiDiagram.vertices().begin(); 
+		vertex_iter < mVoronoiDiagram.vertices().end(); vertex_iter++)
+	{
+		const voronoi_vertex* vt = &*vertex_iter;
+		vt->color(MAT_UNKNOWN);
+		if (!mPolygons.within(gte::Point2i(vt->x(), vt->y())))
+			continue;
+		
+		const voronoi_edge* edge = vt->incident_edge();
+		if (edge->is_primary() && edge->is_finite())
+		{
+			size_t count(0);
+			do
+			{
+				std::size_t index = edge->cell()->source_index();
+				std::size_t twin_index = edge->twin()->cell()->source_index();
+				double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
+				if (dist < 0.0)
+					++count;
+				if (0.0 == dist)
+				{
+					dist = boost::geometry::distance(segments[index], segments[twin_index]);
+					if(dist > 0.0)
+						++count;
+				}
+				edge = edge->rot_next();
+			} while (edge != vt->incident_edge());
+			if(1 == count)
+				vt->color(MAT_VERTEX_END);
+			if(2 == count)
+				vt->color(MAT_VERTEX_SKL);
+			if(2 < count)
+				vt->color(MAT_VERTEX_FORK);
+		}
+	}
+	//! 端点和分叉点
+	gte::MultiPoints2i* fork_pts = new gte::MultiPoints2i;
+	gte::MultiPoints2i* end_pts = new gte::MultiPoints2i;
+	gte::MultiSegments2i* branch_segms = new gte::MultiSegments2i;
+	int cout = 0;
+	for (voronoi_diagram::const_vertex_iterator vertex_iter = mVoronoiDiagram.vertices().begin()
+		; vertex_iter < mVoronoiDiagram.vertices().end(); vertex_iter++)
+	{
+		const voronoi_vertex* vt = &*vertex_iter;
+		if (MAT_VERTEX_END == vt->color())
+		{
+			++cout;
+			if (cout != 4 && cout != 5)
+				continue;
+			end_pts->push_back(gte::Point2i(vt->x(), vt->y()));
+			
+			const voronoi_edge* edge = vt->incident_edge();
+			do
+			{
+				const voronoi_vertex* vt0 = edge->vertex0();
+				const voronoi_vertex* vt1 = edge->vertex1();
+				gte::Point2i pt0(vt0->x(), vt0->y());
+				gte::Point2i pt1(vt1->x(), vt1->y());
+
+				branch_segms->push_back({ pt0,pt1 });
+
+				std::size_t index = edge->cell()->source_index();
+				std::size_t twin_index = edge->twin()->cell()->source_index();
+				std::size_t indexct = edge->cell()->source_category();
+				std::size_t twin_indexct = edge->twin()->cell()->source_category();
+				double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
+				dist = boost::geometry::distance(segments[index], segments[twin_index]);
+				std::size_t cl0 = vt0->color();
+				std::size_t cl1 = vt1->color();
+				edge = edge->rot_next();
+			} while (edge != vt->incident_edge());
+		}
+		if (MAT_VERTEX_SKL == vt->color())
+		{
+			//fork_pts->push_back(gte::Point2i(vt->x(), vt->y()));
+		}
+		if (MAT_VERTEX_FORK == vt->color())
+		{
+			fork_pts->push_back(gte::Point2i(vt->x(), vt->y()));
+			/*const voronoi_edge* edge = vt->incident_edge();
+			do
+			{
+				const voronoi_vertex* vt0 = edge->vertex0();
+				const voronoi_vertex* vt1 = edge->vertex1();
+				gte::Point2i pt0(vt0->x(), vt0->y());
+				gte::Point2i pt1(vt1->x(), vt1->y());
+
+				branch_segms->push_back({ pt0,pt1 });
+
+				std::size_t index = edge->cell()->source_index();
+				std::size_t twin_index = edge->twin()->cell()->source_index();
+				std::size_t indexct = edge->cell()->source_category();
+				std::size_t twin_indexct = edge->twin()->cell()->source_category();
+				double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
+
+				edge = edge->rot_next();
+			} while (edge != vt->incident_edge());*/
+		}
+	}
+	mPolys = branch_segms;
+	return;
 	//! 中心线
 	voronoi_diagram::const_edge_iterator edge_iter = mVoronoiDiagram.edges().begin();
 	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
@@ -55,79 +158,115 @@ void MedialAxisTransform::ConstructVoronoi()
 			std::size_t twin_index = edge_iter->twin()->cell()->source_index();
 			//! 对应支撑线段方向相反
 			double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
-			if(dist < 0.0)
+			if(dist <= 0.0)
 			{
-				//gte::Point2i pt0(edge_iter->vertex0()->x(), edge_iter->vertex0()->y());
-				//gte::Point2i pt1(edge_iter->vertex1()->x(), edge_iter->vertex1()->y());
-				//if (mPolygons.within(pt0) && mPolygons.within(pt1))
+				gte::Point2i pt0(edge_iter->vertex0()->x(), edge_iter->vertex0()->y());
+				gte::Point2i pt1(edge_iter->vertex1()->x(), edge_iter->vertex1()->y());
+				if (mPolygons.within(pt0) && mPolygons.within(pt1))
 				{
 					edge_iter->color(MAT_EDGE_SKL);
 					edge_iter->cell()->color(1);
+
+					edge_iter->vertex0()->color();
+					/*double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
+					if (dist >= 0.0)
+					{
+						std::cout << pt0.x() << std::endl;
+					}*/
 				}
 			}
 		}
 	}
 	//! 顺序中心线折线段
 	gte::Polylines2i* polylines = new gte::Polylines2i;
-	edge_iter = mVoronoiDiagram.edges().begin();
+	
 	std::map<const voronoi_edge*, bool> flag;
 	std::map<const voronoi_cell*, bool> cell_flag;
 	std::deque<std::deque<const voronoi_edge*>> mat_tmp_edges;
-	voronoi_diagram::const_cell_iterator cell_iter = mVoronoiDiagram.cells().begin();
-	for (; cell_iter != mVoronoiDiagram.cells().end(); ++cell_iter)
-	{
-		if (1 == cell_iter->color())
-		{
-			if (cell_flag[&*cell_iter])
-				continue;
-			//! cell的第一个骨架边
-			const voronoi_edge* one_edge = NULL;
-			const voronoi_edge* edge = cell_iter->incident_edge();
-			do {
-				if (MAT_EDGE_SKL == edge->color())
-				{
-					one_edge = edge;
-					break;
-				}
-				edge = edge->next();
-			} while (edge != cell_iter->incident_edge());
-			
-			//! 同cell内的其它顺序骨架边
-			if (NULL == one_edge)
-				continue;
 
+	edge_iter = mVoronoiDiagram.edges().begin();
+	for (; edge_iter != mVoronoiDiagram.edges().end(); ++edge_iter)
+	{
+		if (MAT_EDGE_SKL == edge_iter->color())
+		{
+			const voronoi_edge* one_edge = &*edge_iter;
 			std::deque<const voronoi_edge*> edges;
+			
 			travelInCell(one_edge, edges);
 
 			bool trval = false;
 			do
 			{
-				/*if (countMATEdge(edges.back()) > 2)
-					break;*/
 				trval = backNextTravel(edges.back(), edges);
 			} while (trval);
 			do
 			{
-				/*if (countMATEdge(edges.front()) > 2)
-					break;*/
 				trval = frontPrevTravel(edges.front(), edges);
 			} while (trval);
+
 			for (auto edge : edges)
 			{
 				edge->color(0);
 				edge->twin()->color(0);
-				cell_flag[edge->cell()] = true;
-				cell_flag[edge->twin()->cell()] = true;
 			}
 			mat_tmp_edges.push_back(edges);
+			/*if (edges.size() > 420)
+				break;*/
 		}
 	}
+	//voronoi_diagram::const_cell_iterator cell_iter = mVoronoiDiagram.cells().begin();
+	//for (; cell_iter != mVoronoiDiagram.cells().end(); ++cell_iter)
+	//{
+	//	if (1 == cell_iter->color())
+	//	{
+	//		if (cell_flag[&*cell_iter])
+	//			continue;
+	//		//! cell的第一个骨架边
+	//		const voronoi_edge* one_edge = NULL;
+	//		const voronoi_edge* edge = cell_iter->incident_edge();
+	//		do {
+	//			if (MAT_EDGE_SKL == edge->color())
+	//			{
+	//				one_edge = edge;
+	//				break;
+	//			}
+	//			edge = edge->next();
+	//		} while (edge != cell_iter->incident_edge());
+	//		
+	//		//! 同cell内的其它顺序骨架边
+	//		if (NULL == one_edge)
+	//			continue;
+	//		std::deque<const voronoi_edge*> edges;
+	//		travelInCell(one_edge, edges);
+
+	//		/*bool trval = false;
+	//		do
+	//		{
+	//			trval = backNextTravel(edges.back(), edges);
+	//		} while (trval);
+	//		do
+	//		{
+	//			trval = frontPrevTravel(edges.front(), edges);
+	//		} while (trval);*/
+	//		for (auto edge : edges)
+	//		{
+	//			edge->color(0);
+	//			edge->twin()->color(0);
+	//			cell_flag[edge->cell()] = true;
+	//			cell_flag[edge->twin()->cell()] = true;
+	//		}
+	//		mat_tmp_edges.push_back(edges);
+	//	}
+	//}
+
 	std::deque<std::deque<const voronoi_edge*>> mat_edges= mat_tmp_edges;
 	//connectCellMATEdge(mat_tmp_edges, mat_edges);
 
 	for (size_t i = 0; i < mat_edges.size(); i++)
 	{
-		
+		if (i != 0)
+			continue;
+
 		gte::Polyline2i polyline;
 		size_t edges_size = mat_edges[i].size();
 		for (size_t k = 0; k < edges_size; k++)
@@ -255,20 +394,78 @@ void MedialAxisTransform::ConstructVoronoi()
 }
 bool MedialAxisTransform::backNextTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst)
 {
-	//const voronoi_edge* edge = src->next()->twin();
+	//! 分支
 	if (countMATEdge(src->next()) > 2)
-		return false;
-	const voronoi_edge* cur_edge = src->next();
-	do
 	{
-		cur_edge = cur_edge->rot_next();
-		if (cur_edge->color())
-			break;
-	} while (cur_edge != src->next());
-	if (!cur_edge->color())
+		std::cout << "fork edge" << std::endl;
 		return false;
+	}
+	
+	//! 骨架
+	const voronoi_edge* one_edge = NULL;
+	const voronoi_edge* cur_edge = src->next();
+	if (MAT_EDGE_SKL == cur_edge->color())
+	{
+		one_edge = cur_edge;
+	}
+	else {
+		do
+		{
+			cur_edge = cur_edge->rot_next();
+			if (MAT_EDGE_SKL == cur_edge->color() && cur_edge != src->twin() && cur_edge != src)
+			{
+				one_edge = cur_edge;
+				break;
+			}
+		} while (cur_edge != src->next());
+	}
+	if (NULL == one_edge)
+	{
+		std::cout << "end edge" << std::endl;
+		return false;
+	}
+	//! 
 	std::deque<const voronoi_edge*> edges;
-	travelInCell(cur_edge, edges);
+	edges.push_back(cur_edge);
+	cur_edge->color(MAT_EDGE_SKL_BRANCH);
+	cur_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+	cur_edge = one_edge;
+	{
+		const voronoi_edge* tmp_edge = cur_edge->next();
+		do
+		{
+			if (MAT_EDGE_SKL == tmp_edge->color())
+			{
+				if (countMATEdge(tmp_edge) > 2)
+					break;
+				edges.push_back(tmp_edge);
+				tmp_edge->color(MAT_EDGE_SKL_BRANCH);
+				tmp_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+			}
+			else {
+				break;
+			}
+			tmp_edge = tmp_edge->next();
+		} while (tmp_edge != edges.front());
+
+		tmp_edge = cur_edge->prev();
+		do
+		{
+			if (MAT_EDGE_SKL == tmp_edge->color())
+			{
+				if (countMATEdge(tmp_edge) > 2)
+					break;
+				edges.push_back(tmp_edge);
+				tmp_edge->color(MAT_EDGE_SKL_BRANCH);
+				tmp_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+			}
+			else {
+				break;
+			}
+			tmp_edge = tmp_edge->prev();
+		} while (tmp_edge != edges.back());
+	}
+	//travelInCell(cur_edge, edges);
 	if (edges.empty())
 		return false;
 	for (size_t i = 0; i < edges.size(); i++)
@@ -279,19 +476,71 @@ bool MedialAxisTransform::backNextTravel(const voronoi_edge* src, std::deque<con
 }
 bool MedialAxisTransform::frontPrevTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst)
 {
-	if (countMATEdge(src->prev()) > 2)
+	if (countMATEdge(src) > 2)
 		return false;
-	const voronoi_edge* cur_edge = src->prev();
-	do
+
+	const voronoi_edge* one_edge = NULL;
+	const voronoi_edge* cur_edge = src->twin();
+	//if (cur_edge->color())
 	{
-		cur_edge = cur_edge->rot_prev();
-		if (cur_edge->color())
-			break;
-	} while (cur_edge != src->prev());
-	if (!cur_edge->color())
+		//one_edge = cur_edge;
+	}
+	//else {
+		do
+		{
+			cur_edge = cur_edge->rot_next();
+			int color = cur_edge->color();
+			if (MAT_EDGE_SKL == cur_edge->color() && cur_edge != src->twin() && cur_edge != src)
+			{
+				one_edge = cur_edge;
+				break;
+			}
+		} while (cur_edge != src->twin());
+//	}
+	if (NULL == one_edge)
 		return false;
+	//! 
 	std::deque<const voronoi_edge*> edges;
-	travelInCell(cur_edge, edges);
+	edges.push_back(cur_edge);
+	cur_edge->color(MAT_EDGE_SKL_BRANCH);
+	cur_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+	cur_edge = one_edge;
+	{
+		const voronoi_edge* tmp_edge = cur_edge->next();
+		do
+		{
+			if (MAT_EDGE_SKL == tmp_edge->color())
+			{
+				if (countMATEdge(tmp_edge) > 2)
+					break;
+				edges.push_back(tmp_edge);
+				tmp_edge->color(MAT_EDGE_SKL_BRANCH);
+				tmp_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+			}
+			else {
+				break;
+			}
+			tmp_edge = tmp_edge->next();
+		} while (tmp_edge != edges.front());
+
+		tmp_edge = cur_edge->prev();
+		do
+		{
+			if (MAT_EDGE_SKL == tmp_edge->color())
+			{
+				if (countMATEdge(tmp_edge) > 2)
+					break;
+				edges.push_front(tmp_edge);
+				tmp_edge->color(MAT_EDGE_SKL_BRANCH);
+				tmp_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
+			}
+			else {
+				break;
+			}
+			tmp_edge = tmp_edge->prev();
+		} while (tmp_edge != edges.back());
+	}
+	//travelInCell(cur_edge, edges);
 	if (edges.empty())
 		return false;
 	for (size_t i = 0; i < edges.size(); i++)
@@ -359,31 +608,21 @@ bool MedialAxisTransform::isConnect(const voronoi_edge* src, const voronoi_edge*
 
 void MedialAxisTransform::travelInCell(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst)
 {
-	if (src->color())
+	if (MAT_EDGE_SKL == src->color())
 	{
-		if (MAT_EDGE_SKL_BRANCH != src->color())
-		{
-			src->color(MAT_EDGE_SKL_BRANCH);
-			dst.push_back(src);
-		}
-		else {
-			return;
-		}
+		dst.push_back(src);
+		src->color(MAT_EDGE_SKL_BRANCH);
+		src->twin()->color(MAT_EDGE_SKL_BRANCH);
 		const voronoi_edge* cur_edge = src->next();
 		do
 		{
-			if (cur_edge->color())
+			if (MAT_EDGE_SKL == cur_edge->color())
 			{
 				if (countMATEdge(cur_edge) > 2)
 					break;
-				if (MAT_EDGE_SKL_BRANCH != cur_edge->color())
-				{
-					cur_edge->color(MAT_EDGE_SKL_BRANCH);
-					dst.push_back(cur_edge);
-				}
-				else {
-					break;
-				}
+				dst.push_back(cur_edge);
+				cur_edge->color(MAT_EDGE_SKL_BRANCH);
+				cur_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
 			}
 			else {
 				break;
@@ -394,41 +633,19 @@ void MedialAxisTransform::travelInCell(const voronoi_edge* src, std::deque<const
 		cur_edge = src->prev();
 		do
 		{
-			if (cur_edge->color())
+			if (MAT_EDGE_SKL == cur_edge->color())
 			{
 				if (countMATEdge(cur_edge) > 2)
 					break;
-				if (MAT_EDGE_SKL_BRANCH != cur_edge->color())
-				{
-					cur_edge->color(MAT_EDGE_SKL_BRANCH);
-					dst.push_back(cur_edge);
-				}
-				else {
-					break;
-				}
+				dst.push_front(cur_edge);
+				cur_edge->color(MAT_EDGE_SKL_BRANCH);
+				cur_edge->twin()->color(MAT_EDGE_SKL_BRANCH);
 			}
 			else {
 				break;
 			}
 			cur_edge = cur_edge->prev();
 		} while (cur_edge != dst.back());
-	}
-	else {
-		const voronoi_edge* cur_edge = src;
-		do
-		{
-			if (cur_edge->color())
-			{
-				if (countMATEdge(cur_edge) > 2)
-					break;
-				if (MAT_EDGE_SKL_BRANCH != cur_edge->color())
-				{
-					cur_edge->color(MAT_EDGE_SKL_BRANCH);
-					dst.push_back(cur_edge);
-				}
-			}
-			cur_edge = cur_edge->next();
-		} while (cur_edge != src);
 	}
 }
 size_t MedialAxisTransform::countMATEdge(const voronoi_edge* src)
@@ -441,8 +658,9 @@ size_t MedialAxisTransform::countMATEdge(const voronoi_edge* src)
 		if (cur_edge->color())
 			++count;
 	} while (cur_edge != src);
+	return count;
 
-	size_t count0 = 0;
+	/*size_t count0 = 0;
 	cur_edge = src->twin();
 	do
 	{
@@ -450,6 +668,5 @@ size_t MedialAxisTransform::countMATEdge(const voronoi_edge* src)
 		if (cur_edge->color())
 			++count0;
 	} while (cur_edge != src->twin());
-
-	return count> count0? count: count0;
+	return count> count0? count: count0;*/
 }

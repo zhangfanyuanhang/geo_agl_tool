@@ -99,6 +99,9 @@
     <ClInclude Include="Segment2.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MultiPntSgm.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GeometricToolsEngine.cpp">

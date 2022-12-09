@@ -42,7 +42,11 @@ class MedialAxisTransform
 		MAT_EDGE_SKL = 1,
 		MAT_EDGE_SKL_FORK = 2,
 
-		MAT_EDGE_SKL_BRANCH = 10,
+		MAT_EDGE_SKL_BRANCH = 9,
+
+		MAT_VERTEX_SKL = 11,
+		MAT_VERTEX_FORK = 12,
+		MAT_VERTEX_END = 13,
 	};
 	struct MATHalfEdge;
 	struct MATVertex {

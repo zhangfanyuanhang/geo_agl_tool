@@ -144,6 +144,39 @@ namespace gui {
 				drawPolygon(&(*data)[j]);
 			}
 		}
+
+		if (type == typeid(gte::MultiPoints2i))
+		{
+			gte::MultiPoints2i* data = (gte::MultiPoints2i*)dataptr;
+			for (size_t j = 0; j < data->size(); ++j)
+			{
+				drawPoint(&(*data)[j]);
+			}
+		}
+		if (type == typeid(gte::MultiPoints2d))
+		{
+			gte::MultiPoints2d* data = (gte::MultiPoints2d*)dataptr;
+			for (size_t j = 0; j < data->size(); ++j)
+			{
+				drawPoint(&(*data)[j]);
+			}
+		}
+		if (type == typeid(gte::MultiSegments2i))
+		{
+			gte::MultiSegments2i* data = (gte::MultiSegments2i*)dataptr;
+			for (size_t j = 0; j < data->size(); ++j)
+			{
+				drawSegment(&(*data)[j]);
+			}
+		}
+		if (type == typeid(gte::MultiSegments2d))
+		{
+			gte::MultiSegments2d* data = (gte::MultiSegments2d*)dataptr;
+			for (size_t j = 0; j < data->size(); ++j)
+			{
+				drawSegment(&(*data)[j]);
+			}
+		}
 	}
 	template <typename T>
 	void Graphic2::drawPolyline(T* data)
@@ -174,8 +207,27 @@ namespace gui {
 			polygon(&pts[0], size);
 		}
 	}
+	template <typename T>
+	void Graphic2::drawPoint(T* data)
+	{
+		circle((LONG)data->x(), (LONG)data->y(),2000);
+	}
+
+	template <typename T>
+	void Graphic2::drawSegment(T* data)
+	{
+		POINT pt0 = { (LONG)data->p0().x(),  (LONG)data->p0().y() };
+		POINT pt1 = { (LONG)data->p1().x(),  (LONG)data->p1().y() };
+		POINT pts[] = {pt0,pt1};
+		polyline(&pts[0], 2);
+	}
 	template void Graphic2::drawPolyline(gte::Polyline2i* data);
 	template void Graphic2::drawPolyline(gte::Polyline2d* data);
 	template void Graphic2::drawPolygon(gte::Polygon2i* data);
 	template void Graphic2::drawPolygon(gte::Polygon2d* data);
+	template void Graphic2::drawPoint(gte::Point2i* data);
+	template void Graphic2::drawPoint(gte::Point2d* data);
+
+	template void Graphic2::drawSegment(gte::Segment2i* data);
+	template void Graphic2::drawSegment(gte::Segment2d* data);
 }

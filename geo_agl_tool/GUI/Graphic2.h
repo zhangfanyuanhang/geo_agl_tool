@@ -7,7 +7,7 @@
 #include "Graphic.h"
 #include "graphics.h"	
 #include <conio.h>
-
+#include "GeometricToolsEngine.h"
 
 namespace gui {
 
@@ -23,7 +23,6 @@ namespace gui {
 
 		void show(gte::PolyBase* data)override;
 		
-
 	private:
 
 		void drawAll();
@@ -38,6 +37,12 @@ namespace gui {
 
 		template <typename T>
 		void drawPolygon(T* data);
+
+		template <typename T>
+		void drawPoint(T* data);
+
+		template <typename T>
+		void drawSegment(T* data);
 	private:
 		gte::PolyBase* mDataPtr = nullptr;
 	};

@@ -19,8 +19,7 @@ namespace gte {
 		typedef typename std::deque<data_type>::iterator iterator;
 	
 		~Sequencer() = default;
-	//! 不支持单独构造
-	protected:
+
 		Sequencer() = default;
 		Sequencer(const std::list<data_type>& pts) :PolyBase(), mData(pts.begin(), pts.end()) {}
 		Sequencer(const std::vector<data_type>& pts) :PolyBase(),mData(pts.begin(), pts.end()){}

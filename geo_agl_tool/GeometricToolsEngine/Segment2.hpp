@@ -26,6 +26,7 @@ namespace gte {
 		Segment2(const point_type& pt0, const point_type& pt1):Segment<point_type>(pt0,pt1){}
 		Segment2(std::initializer_list<point_type> segm):Segment<point_type>(segm) {}
 
+		Segment2(const Segment<point_type>& segm) :Segment<point_type>(segm) {}
 	};
 }
 

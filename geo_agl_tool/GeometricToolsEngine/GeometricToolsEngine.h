@@ -13,6 +13,7 @@
 #include "Polyline2.hpp"
 #include "Polygons2.hpp"
 #include "Polylines2.hpp"
+#include "MultiPntSgm.hpp"
 
 #include "Convertor.hpp"
 
