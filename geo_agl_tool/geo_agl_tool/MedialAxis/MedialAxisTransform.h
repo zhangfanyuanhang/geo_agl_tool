@@ -87,6 +87,8 @@ private:
 	gui::Graphic* mGraphicPtr;
 	gte::PolyBase* mPolys;
 
+	std::deque<std::deque<const voronoi_vertex*>> mBranchs;
+
 	std::vector<MATHalfEdge *> halfEdges;
 	std::vector<MATVertex *> vertices;
 	std::vector<MATEdge *> edges;

@@ -23,7 +23,7 @@ namespace gte {
 		Sequencer() = default;
 		Sequencer(const std::list<data_type>& pts) :PolyBase(), mData(pts.begin(), pts.end()) {}
 		Sequencer(const std::vector<data_type>& pts) :PolyBase(),mData(pts.begin(), pts.end()){}
-		Sequencer(std::initializer_list<data_type>& pts) :PolyBase(), mData(pts) {}
+		Sequencer(const std::initializer_list<data_type>& pts) :PolyBase(), mData(pts) {}
 		template <typename Iter>
 		Sequencer(const Iter begin, const Iter end) : PolyBase(), mData(begin, end) {}
 		Sequencer(const Sequencer&) = default;

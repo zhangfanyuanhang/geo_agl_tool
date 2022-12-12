@@ -25,7 +25,7 @@ namespace gte {
 		Polygon2(const Polygon2&) = default;
 		Polygon2(const std::list<point_type>& pts) :Polygon<Point2<CoordType>>(pts) {}
 		Polygon2(const std::vector<point_type>& pts) :Polygon<Point2<CoordType>>(pts) {}
-		Polygon2(std::initializer_list<point_type>& pts) :Polygon<Point2<CoordType>>(pts) {}
+		Polygon2(const std::initializer_list<point_type>& pts) :Polygon<Point2<CoordType>>(pts) {}
 
 		//! ÷ÿ‘ÿ µœ÷	
 	public:

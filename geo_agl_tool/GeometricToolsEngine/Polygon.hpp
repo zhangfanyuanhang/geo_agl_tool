@@ -20,7 +20,7 @@ namespace gte {
 
 		Polygon(const std::list<point_type>& pts) :Sequencer<point_type>(pts) {}
 		Polygon(const std::vector<point_type>& pts) :Sequencer<point_type>(pts) {}
-		Polygon(std::initializer_list<point_type>& pts):Sequencer<point_type> (pts){}
+		Polygon(const std::initializer_list<point_type>& pts):Sequencer<point_type> (pts){}
 
 	//! ÷ÿ‘ÿ µœ÷	
 	public:
