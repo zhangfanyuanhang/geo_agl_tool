@@ -31,6 +31,9 @@ void MedialAxisTransform::ConstructVoronoi()
 {
 	//! Voronoi图
 	std::vector<gte::Segment2i> segments;
+	std::map<size_t,std::pair<size_t, size_t>> segm_list;
+	int segm_size = 0;
+	size_t start_segm=0, end_segm=0;
 	boost::polygon::voronoi_builder<int64_t, boost::polygon::detail::my_voronoi_ctype_traits<int64_t>> voronoi_builder;
 	size_t ply_size = mPolygons.size();
 	for (size_t i = 0; i < ply_size; i++)
@@ -38,9 +41,16 @@ void MedialAxisTransform::ConstructVoronoi()
 		size_t pt_size = mPolygons[i].size();
 		for (size_t j = 0; j < pt_size; j++)
 		{
+			
 			segments.push_back({ gte::Point2i(mPolygons[i][j].x(), mPolygons[i][j].y()), gte::Point2i(mPolygons[i][(j + 1) % pt_size].x(), mPolygons[i][(j + 1) % pt_size].y()) });
 			voronoi_builder.insert_segment(mPolygons[i][j].x(), mPolygons[i][j].y(), mPolygons[i][(j+1)%pt_size].x(), mPolygons[i][(j + 1) % pt_size].y());
+			segm_list[segm_size] = { segm_size -1,segm_size + 1 };
+			++segm_size;
 		}
+		end_segm = segm_size - 1;
+		segm_list[start_segm].first = segm_size - 1;
+		segm_list[end_segm].second = segm_size - pt_size;
+		start_segm = end_segm +1;
 	}
 	voronoi_builder.construct(&mVoronoiDiagram);
 	//
@@ -50,7 +60,6 @@ void MedialAxisTransform::ConstructVoronoi()
 	gte::MultiSegments2i* branch_segms = new gte::MultiSegments2i;
 
 	//! 中心点，端点和分叉点。
-	size_t segm_size = segments.size();
 	for (voronoi_diagram::const_vertex_iterator vertex_iter = mVoronoiDiagram.vertices().begin(); 
 		vertex_iter < mVoronoiDiagram.vertices().end(); vertex_iter++)
 	{
@@ -69,91 +78,30 @@ void MedialAxisTransform::ConstructVoronoi()
 				std::size_t category = edge->cell()->source_category();
 				std::size_t twin_index = edge->twin()->cell()->source_index();
 				std::size_t twin_category = edge->twin()->cell()->source_category();
-				//double dist = 1.0;
-				//if ((boost::polygon::SOURCE_CATEGORY_INITIAL_SEGMENT == category || boost::polygon::SOURCE_CATEGORY_REVERSE_SEGMENT == category)
-				//&& (boost::polygon::SOURCE_CATEGORY_INITIAL_SEGMENT == twin_category || boost::polygon::SOURCE_CATEGORY_REVERSE_SEGMENT == twin_category))
-				//{
-				//	dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
-				//	if (dist <= 0.0)
-				//	{
-				//		++count;
-				//	}
-				//}
-				//else {
-				//	gte::Segment2i segm(gte::Point2i(edge->vertex0()->x(), edge->vertex0()->y()), gte::Point2i(edge->vertex1()->x(), edge->vertex1()->y()));
-				//	if (boost::polygon::SOURCE_CATEGORY_INITIAL_SEGMENT == category || boost::polygon::SOURCE_CATEGORY_REVERSE_SEGMENT == category)
-				//	{
-				//		dist = boost::geometry::dot_product(segments[index].toVector(), segm.toVector());
-				//		double len = boost::geometry::distance(segments[index].p0(), segments[index].p1()) * boost::geometry::distance(segm.p0(),segm.p1());
-				//		double angle = std::abs(dist / len);
-				//		if (std::abs(angle - 1.0) < 0.1)
-				//		{
-				//			++count;
-				//		}
-				//		/*gte::Point2i pt = segments[twin_index].p0();
-				//		if (boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == twin_category)
-				//			pt = segments[twin_index].p1();
-				//		double d0 = boost::geometry::distance(pt,segm);
-				//		double d1 = boost::geometry::distance(segments[index], segm);
-				//		if (d0 == d1)
-				//			++count;*/
 
-				//		/*dist = boost::geometry::dot_product(segments[index].toVector(), segments[(twin_index + 1) % segm_size].toVector());
-				//		if (dist < 0.0)
-				//		{
-				//			++count;
-				//		}*/
-				//	}
-				//	if (boost::polygon::SOURCE_CATEGORY_INITIAL_SEGMENT == twin_category || boost::polygon::SOURCE_CATEGORY_REVERSE_SEGMENT == twin_category)
-				//	{
-				//		dist = boost::geometry::dot_product(segments[twin_index].toVector(), segm.toVector());
-				//		double len = boost::geometry::distance(segments[twin_index].p0(), segments[twin_index].p1()) * boost::geometry::distance(segm.p0(), segm.p1());
-				//		double angle = std::abs(dist / len);
-				//		if (std::abs(angle - 1.0) < 0.1)
-				//		{
-				//			++count;
-				//		}
-
-				//	}
-				//	if ((boost::polygon::SOURCE_CATEGORY_SEGMENT_START_POINT == category || boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == category)
-				//		&& (boost::polygon::SOURCE_CATEGORY_SEGMENT_START_POINT == twin_category || boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == twin_category))
-				//	{
-				//		/*gte::Segment2i segm(gte::Point2i(edge->vertex0()->x(), edge->vertex0()->y()), gte::Point2i(edge->vertex1()->x(), edge->vertex1()->y()));
-				//		gte::Point2i pt = segments[index].p0();
-				//		if (boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == category)
-				//			pt = segments[index].p1();
-				//		gte::Point2i twin_pt = segments[twin_index].p0();
-				//		if (boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == twin_category)
-				//			twin_pt = segments[twin_index].p1();
-
-				//		double d0 = boost::geometry::distance(pt, segm);
-				//		double d1 = boost::geometry::distance(twin_pt, segm);
-				//		if (std::abs(d0 - d1)<1000.0)
-				//			++count;*/
-
-				//		++count;
-				//	}
-				//}
-
-				gte::Point2i pt = boost::geometry::cross_product(segments[index].toVector(), segments[twin_index].toVector());
-				//double dist = boost::geometry::;
-				double dist = boost::geometry::dot_product(segments[index].toVector(), segments[twin_index].toVector());
+				gte::Segment2i segm = segments[index];
+				if (boost::polygon::SOURCE_CATEGORY_SEGMENT_START_POINT == category)
+				{
+					segm = {segments[segm_list[index].first].p0(),segments[index].p1() };
+				}
+				if (boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == category)
+				{
+					segm = { segments[index].p0(),segments[segm_list[index].second].p1()};
+				}
+				gte::Segment2i twin_segm = segments[twin_index];
+				if (boost::polygon::SOURCE_CATEGORY_SEGMENT_START_POINT == twin_category)
+				{
+					twin_segm = { segments[segm_list[twin_index].first].p0(),segments[twin_index].p1() };
+				}
+				if (boost::polygon::SOURCE_CATEGORY_SEGMENT_END_POINT == twin_category)
+				{
+					twin_segm = { segments[twin_index].p0(),segments[segm_list[twin_index].second].p1() };
+				}
+				double dist = boost::geometry::dot_product(segm.toVector(), twin_segm.toVector());
 				if (dist < 0.0)
 				{
 					++count;
 				}
-				else {
-					dist = boost::geometry::dot_product(segments[(index+1)% segm_size].toVector(), segments[(twin_index+1)% segm_size].toVector());
-					if (dist < 0.0)
-					{
-						++count;
-					}
-					else {
-						/*if (mPolygons.within(gte::Point2i(edge->vertex1()->x(), edge->vertex1()->y())))
-							++count;*/
-					}
-				}
-				
 				edge = edge->rot_next();
 			} while (edge != vt->incident_edge());
 			if (1 == count)
@@ -173,8 +121,8 @@ void MedialAxisTransform::ConstructVoronoi()
 			}
 		}
 	}
-	mPolys = end_pts;
-	return ;
+	//mPolys = skl_pts;
+	//return ;
 	//! 遍历分支
 	std::map<const voronoi_vertex*, bool> vertex_flag;
 	for (voronoi_diagram::const_vertex_iterator vertex_iter = mVoronoiDiagram.vertices().begin()
@@ -199,7 +147,7 @@ void MedialAxisTransform::ConstructVoronoi()
 				if (edge->is_primary() && edge->is_finite())
 				{
 					const voronoi_vertex* nvt = edge->vertex1();
-					if (MAT_UNKNOWN != nvt->color())
+					if (MAT_UNKNOWN != nvt->color() && !vertex_flag[nvt])
 					{
 						branch.push_back(nvt);
 						vertex_flag[nvt] = true;

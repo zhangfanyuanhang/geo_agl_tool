@@ -118,7 +118,7 @@ int TriMesh::slice(const gte::Point3d& point, const gte::Vector3d& direction,gte
 			{
 				float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
 				float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
-				std::cout << px << " " << py << std::endl;
+				//std::cout << px << " " << py << std::endl;
 				polygon.push_back(gte::Point2d{px,py});
 			}
 			plys->push_back(polygon);
