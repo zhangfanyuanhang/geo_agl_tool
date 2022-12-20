@@ -72,12 +72,8 @@ public:
 	void show();
 
 private:
-	void travelInCell(const voronoi_edge* src,std::deque<const voronoi_edge*>& dst);
-	size_t countMATEdge(const voronoi_edge* src);
-	bool backNextTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst);
-	bool frontPrevTravel(const voronoi_edge* src, std::deque<const voronoi_edge*>& dst);
-	bool isConnect(const voronoi_edge* src, const voronoi_edge* dst);
-	void connectCellMATEdge(std::deque<std::deque<const voronoi_edge*>>& src, std::deque<std::deque<const voronoi_edge*>>& dst);
+
+
 private:
 	voronoi_diagram mVoronoiDiagram;
 private:
