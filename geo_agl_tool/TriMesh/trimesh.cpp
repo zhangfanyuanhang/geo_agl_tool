@@ -53,18 +53,19 @@ int TriMesh::slice(const gte::Point3d& point, const gte::Vector3d& direction,gte
 
 	//! slice plane
 	PyObject* pCentroid = PyObject_GetAttrString(mpTriMesh, "centroid");
-	double pt[] = { point.x(),point.y(),point.z()};
+	float pt[] = { point.x(),point.y(),point.z()};
 	float dir[] = { direction.x(),direction.y(),direction.z() };
 	npy_intp dims[] = { 3 };
 	PyObject* ppt = PyArray_SimpleNewFromData(1, dims, NPY_FLOAT, pt);
 	PyObject* pdir = PyArray_SimpleNewFromData(1, dims, NPY_FLOAT, dir);
 	PyObject * pSliceParam = PyTuple_New(2);
-	PyTuple_SetItem(pSliceParam, 0, pCentroid);
+	//PyTuple_SetItem(pSliceParam, 0, pCentroid);
+	PyTuple_SetItem(pSliceParam, 0, ppt);
 	PyTuple_SetItem(pSliceParam, 1, pdir);
 
 	//! slice mesh
 	PyObject* pSection = PyObject_GetAttrString(mpTriMesh, "section");
-	PyObject* mpSlice = PyObject_CallObject(pSection, pSliceParam);
+	/*PyObject**/ mpSlice = PyObject_CallObject(pSection, pSliceParam);
 	if (nullptr == mpSlice)
 	{
 		std::cout << "not found trimesh section" << std::endl;
@@ -78,29 +79,50 @@ int TriMesh::slice(const gte::Point3d& point, const gte::Vector3d& direction,gte
 	//Polygons2d polygons;
 	//! points
 	{
+
 		//! polygons
-		PyObject* pPolygons = PyObject_GetAttrString(pPath2D, "polygons_closed");
-		PyObject* pPly = PySequence_GetItem(pPolygons, 0);
+		//PyObject* pPolygons = PyObject_GetAttrString(pPath2D, "polygons_closed");
+		//Py_ssize_t ply_size = PySequence_Size(pPolygons);
+		//PyObject* pPly = PySequence_GetItem(pPolygons, 1);
 
-		PyObject* pExterior = PyObject_GetAttrString(pPly, "exterior");
-		PyObject* pCoords = PyObject_GetAttrString(pExterior, "coords");
-		PyObject* pXY = PyObject_GetAttrString(pCoords, "xy");
-		Py_ssize_t pt_size = PySequence_Size(pCoords);
-		PyObject* pX = PyTuple_GetItem(pXY, 0);
-		PyObject* pY = PyTuple_GetItem(pXY, 1);
+		//PyObject* pExterior = PyObject_GetAttrString(pPly, "exterior");
+		//PyObject* pCoords = PyObject_GetAttrString(pExterior, "coords");
+		//PyObject* pXY = PyObject_GetAttrString(pCoords, "xy");
+		//Py_ssize_t pt_size = PySequence_Size(pCoords);
+		//PyObject* pX = PyTuple_GetItem(pXY, 0);
+		//PyObject* pY = PyTuple_GetItem(pXY, 1);
 
-		gte::Polygon2d polygon;
-		for (size_t i = 0; i < pt_size; i++)
-		{
-			float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
-			float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
-			polygon.push_back(gte::Point2d{ px,py });
-		}
-		plys->push_back(polygon);
+		//gte::Polygon2d polygon;
+		//for (size_t i = 0; i < pt_size; i++)
+		//{
+		//	float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
+		//	float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
+		//	polygon.push_back(gte::Point2d{ px,py });
+		//}
+		//plys->push_back(polygon);
 	}
 	{
 		PyObject* pPolygons = PyObject_GetAttrString(pPath2D, "polygons_full");
+		Py_ssize_t plys_size = PySequence_Size(pPolygons);
 		PyObject* pPlys = PySequence_GetItem(pPolygons, 0);
+
+		{
+			PyObject* pExterior = PyObject_GetAttrString(pPlys, "exterior");
+			PyObject* pCoords = PyObject_GetAttrString(pExterior, "coords");
+			PyObject* pXY = PyObject_GetAttrString(pCoords, "xy");
+			Py_ssize_t pt_size = PySequence_Size(pCoords);
+			PyObject* pX = PyTuple_GetItem(pXY, 0);
+			PyObject* pY = PyTuple_GetItem(pXY, 1);
+
+			gte::Polygon2d polygon;
+			for (size_t i = 0; i < pt_size; i++)
+			{
+				float px = (float)PyFloat_AsDouble(PySequence_GetItem(pX, i));
+				float py = (float)PyFloat_AsDouble(PySequence_GetItem(pY, i));
+				polygon.push_back(gte::Point2d{ px,py });
+			}
+			plys->push_back(polygon);
+		}
 
 		PyObject* pInteriors = PyObject_GetAttrString(pPlys, "interiors");
 		Py_ssize_t ply_size = PySequence_Size(pInteriors);

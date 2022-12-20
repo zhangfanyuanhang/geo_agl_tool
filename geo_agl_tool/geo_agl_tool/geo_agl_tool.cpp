@@ -34,16 +34,16 @@ int main()
 
 	{
 		gte::Polygons2d plys;
-		gte::Point3d pt({0,0,100});
+		gte::Point3d pt({0,0,50});
 		gte::Vector3d dir({ 0,0,1 });
 		std::string stl_path = "E:\\Models\\zigzag\\a.stl";
-		stl_path = "E:\\Models\\DType\\D.STL";
+		//stl_path = "E:\\Models\\DType\\D.STL";
+		stl_path = "E:\\Models\\test\\_model1.stl";
 		TriMesh trimesh;
 		trimesh.init();
 		trimesh.loadMesh(stl_path);
 		trimesh.slice(pt,dir,&plys);
 
-		
 		gte::Polygons2i umPlys;
 		gte::polygonsConvertorMM2UM(plys,umPlys);
 		gte::BoundingBox<gte::Point2i> aabb;
