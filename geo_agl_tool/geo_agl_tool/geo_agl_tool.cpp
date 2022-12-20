@@ -37,13 +37,12 @@ int main()
 		gte::Point3d pt({0,0,50});
 		gte::Vector3d dir({ 0,0,1 });
 		std::string stl_path = "E:\\Models\\zigzag\\a.stl";//圆环
-		//stl_path = "E:\\Models\\DType\\D.STL";//D型环+凸台
+		stl_path = "E:\\Models\\DType\\D.STL";//D型环+凸台
 		//stl_path = "E:\\Models\\test\\_model1.stl";//圆环+凸台
 		//stl_path = "E:\\Models\\test\\_model2.stl";//方环
 		//stl_path = "E:\\Models\\test\\_model3.stl";//L型
 		//stl_path = "E:\\Models\\test\\_model4.stl";//十字型
-		stl_path = "E:\\Models\\test\\_model5.stl";//六边型环
-		stl_path = "E:\\Models\\test\\_model6.stl";//五角型
+		//stl_path = "E:\\Models\\test\\_model5.stl";//六边型环
 
 		TriMesh trimesh;
 		trimesh.init();

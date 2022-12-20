@@ -172,7 +172,7 @@ void MedialAxisTransform::ConstructVoronoi()
 		std::deque<const voronoi_vertex*> branch;
 		branch.push_back(vt);
 		vertex_flag[vt] = true;
-		//
+		// Ïòºó±éÀú
 		while (true)
 		{
 			vt = branch.back();
@@ -188,6 +188,7 @@ void MedialAxisTransform::ConstructVoronoi()
 						if (MAT_VERTEX_FORK == nvt->color() || MAT_VERTEX_END == nvt->color())
 						{
 							branch.push_back(nvt);
+							vertex_flag[nvt] = true;
 							have = true;
 							break;
 						}
@@ -217,7 +218,7 @@ void MedialAxisTransform::ConstructVoronoi()
 				break;
 			}
 		}
-		//
+		// ÏòÇ°±éÀú
 		while (true)
 		{
 			if (MAT_VERTEX_END == branch.front()->color() || MAT_VERTEX_FORK == branch.front()->color())
@@ -243,6 +244,7 @@ void MedialAxisTransform::ConstructVoronoi()
 						if (MAT_VERTEX_FORK == nvt->color() || MAT_VERTEX_END == nvt->color())
 						{
 							branch.push_front(nvt);
+							vertex_flag[nvt] = true;
 							have = true;
 							break;
 						}
@@ -258,7 +260,6 @@ void MedialAxisTransform::ConstructVoronoi()
 								have = true;
 								break;
 							}
-							
 						}
 					}
 				}
@@ -272,6 +273,86 @@ void MedialAxisTransform::ConstructVoronoi()
 		mBranchs.push_back(branch);
 	}
 
+
+	//! ¹Ç¼Ü°ë±ßµÄµã½á¹¹
+	std::map<const voronoi_vertex*, MATVertex*> vertex_matv;
+	for (size_t i = 0; i < mBranchs.size(); i++)
+	{
+		if (mBranchs[i].front() == mBranchs[i].back())
+		{
+			;
+		}
+		else {
+			if (!vertex_matv[mBranchs[i].front()])
+			{
+				MATVertex* matv = new MATVertex;
+				matv->he = NULL;
+				matv->mVertex = mBranchs[i].front();
+				vertex_matv[mBranchs[i].front()] = matv;
+				vertices.push_back(matv);
+			}
+			if (!vertex_matv[mBranchs[i].back()])
+			{
+				MATVertex* matv = new MATVertex;
+				matv->he = NULL;
+				matv->mVertex = mBranchs[i].back();
+				vertex_matv[mBranchs[i].back()] = matv;
+				vertices.push_back(matv);
+			}
+		}
+	}
+	//! ¹Ç¼Ü°ë±ßµÄ±ß½á¹¹
+	for (size_t i = 0; i < mBranchs.size(); i++)
+	{
+		//!
+		MATEdge* mate = new MATEdge;
+		MATEdge* mate_twin = new MATEdge;
+		MATHalfEdge* mathe = new MATHalfEdge;
+		MATHalfEdge* mathe_twin = new MATHalfEdge;
+		// ¹Ç¼Ü±ß
+		mate->he = mathe;
+		std::copy(mBranchs[i].begin(), mBranchs[i].end(), std::back_inserter(mate->mEdge));
+		mate_twin->he = mathe_twin;
+		std::reverse_copy(mBranchs[i].begin(), mBranchs[i].end(), std::back_inserter(mate_twin->mEdge));
+		// °ë±ß
+		mathe->edge = mate;
+		mathe->twin = mathe_twin;
+		mathe->next = NULL;
+		mathe->prev = NULL;
+		mathe->origin = vertex_matv[mate->mEdge.front()];
+
+		mathe_twin->edge = mate_twin;
+		mathe_twin->twin = mathe;
+		mathe_twin->next = NULL;
+		mathe_twin->prev = NULL;
+		mathe_twin->origin = vertex_matv[mate_twin->mEdge.front()];
+		//
+		edges.push_back(mate);
+		edges.push_back(mate_twin);
+		halfEdges.push_back(mathe);
+		halfEdges.push_back(mathe_twin);
+	}
+	//! ¹Ç¼Ü°ë±ßÍØÆË
+	for (size_t i = 0; i < halfEdges.size(); i++)
+	{
+		for (size_t j = 0; j < halfEdges.size(); j++)
+		{
+			if (halfEdges[i] == halfEdges[j])
+				continue;
+			if (halfEdges[i]->twin == halfEdges[j] || halfEdges[j]->twin == halfEdges[i])
+				continue;
+
+			if (halfEdges[i]->edge->mEdge.back() == halfEdges[j]->edge->mEdge.front())
+			{
+				halfEdges[i]->next = halfEdges[j];
+			}
+			if (halfEdges[i]->edge->mEdge.front() == halfEdges[j]->edge->mEdge.back())
+			{
+				halfEdges[i]->prev = halfEdges[j];
+			}
+		}
+	}
+	//! 
 	gte::Polylines2i* plylines = new gte::Polylines2i;
 	for (size_t i = 0; i < mBranchs.size(); i++)
 	{

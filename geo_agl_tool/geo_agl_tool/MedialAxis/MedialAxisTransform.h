@@ -51,15 +51,15 @@ class MedialAxisTransform
 	struct MATHalfEdge;
 	struct MATVertex {
 		MATHalfEdge * he;
-		voronoi_vertex* mVertex;
+		const voronoi_vertex* mVertex;
 	};
 	struct MATEdge {
 		MATHalfEdge * he;
-		std::deque<voronoi_edge*> mEdge;
+		std::deque<const voronoi_vertex*> mEdge;
 	};
 	struct MATHalfEdge {
 		MATHalfEdge * next;
-		MATHalfEdge * pre;
+		MATHalfEdge * prev;
 		MATHalfEdge * twin;
 		MATVertex * origin;
 		MATEdge * edge;
@@ -78,8 +78,6 @@ private:
 	voronoi_diagram mVoronoiDiagram;
 private:
 	gte::Polygons2i mPolygons;
-	std::vector<gte::Point2i> mMATPoints;
-
 	gui::Graphic* mGraphicPtr;
 	gte::PolyBase* mPolys;
 
